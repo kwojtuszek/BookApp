@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserBook"
+    android:background="@drawable/backround">
+
+    <TextView
+        android:id="@+id/book_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/ean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/book_title"
+        android:layout_margin="15dp"
+        android:layout_alignParentRight="true"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/book_title"
+        android:layout_margin="15dp"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/white"
+        android:text="TextView"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/pages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/author"
+        android:layout_margin="15dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:text="TextView"
+        android:textSize="20dp" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/assign"
+        android:layout_below="@+id/pages"
+        android:text="@string/assign"
+        android:backgroundTint="#AAAA"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        />
+
+</RelativeLayout>
