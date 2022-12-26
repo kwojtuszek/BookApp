@@ -19,7 +19,16 @@
         android:layout_margin="50dp"
         android:gravity="center"/>
 
-
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/base"
+        android:layout_below="@+id/main"
+        android:text="HALO BAZA"
+        android:backgroundTint="#AAAA"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        />
 
 
 </RelativeLayout>
