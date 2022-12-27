@@ -55,5 +55,7 @@
     <string name="send">Send</string>
     <string name="email_sent">Email with password reset link has been sent</string>
     <string name="email_not_exist">The account with the specified email address does not exist</string>
+    <string name="publisher">Publisher</string>
+    <string name="year">Year of publication</string>
 
 </resources>

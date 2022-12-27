@@ -56,4 +56,6 @@
     <string name="send">Wyślij</string>
     <string name="email_sent">Email z linkiem do resetu hasła został wysłany</string>
     <string name="email_not_exist">Konto z podanym adresem email nie istnieje</string>
+    <string name="publisher">Wydawnictwo</string>
+    <string name="year">Rok wydania</string>
 </resources>
