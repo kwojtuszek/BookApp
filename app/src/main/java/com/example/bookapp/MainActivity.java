@@ -1,11 +1,9 @@
 package com.example.bookapp;
 
-import static android.service.controls.ControlsProviderService.TAG;
+
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,12 +15,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.vishnusivadas.advanced_httpurlconnection.FetchData;
 
 import androidx.annotation.NonNull;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 
 public class MainActivity extends Drawer_base {

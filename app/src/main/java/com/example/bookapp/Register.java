@@ -64,6 +64,8 @@ public class Register extends AppCompatActivity {
                                     if (task.isSuccessful()) {
 
                                         if (task.getResult().isEmpty()) {
+
+                                            // Walidacja adresu email
                                             if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                                                 if (password.length() >= 6) {
 

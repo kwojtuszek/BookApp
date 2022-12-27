@@ -50,4 +50,10 @@
     <string name="email_exists">This email is already taken</string>
     <string name="pass_lenght">The password must be at least 6 characters long</string>
     <string name="email_valid">Enter a valid email address</string>
+    <string name="password_reset">Password Reset</string>
+    <string name="password_reset_description">Please enter the email address of the account to which you want to reset the password</string>
+    <string name="send">Send</string>
+    <string name="email_sent">Email with password reset link has been sent</string>
+    <string name="email_not_exist">The account with the specified email address does not exist</string>
+
 </resources>

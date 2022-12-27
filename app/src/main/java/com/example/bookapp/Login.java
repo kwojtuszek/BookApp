@@ -35,20 +35,26 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        TextView tvUsername = (TextView) findViewById(R.id.username);
-        TextView tvPassword = (TextView) findViewById(R.id.password);
+        TextView tvUsername = findViewById(R.id.username);
+        TextView tvPassword =  findViewById(R.id.password);
 
         TextView register = (TextView) findViewById(R.id.register);
+        TextView forgotpass = (TextView) findViewById(R.id.forgotpass);
 
         MaterialButton login = (MaterialButton) findViewById(R.id.login);
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Przejście do rejestracji
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openRegister();
+            }
+        });
+
+        forgotpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPasswordReset();
             }
         });
 
@@ -125,12 +131,19 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
-
     }
+
+
 
     // Otwarcie aktywności rejestracjo
     public void openRegister() {
         Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+    }
+
+    // Otwarcie aktywności odpowiadającej za odzyskanie hasła
+    public void openPasswordReset() {
+        Intent intent = new Intent(getApplicationContext(), PasswordReset.class);
         startActivity(intent);
     }
 
@@ -139,4 +152,5 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
     }
+
 }
