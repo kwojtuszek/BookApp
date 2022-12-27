@@ -25,12 +25,12 @@
     <string name="bad_login">Błędna nazwa uzytkownika lub hasło!</string>
     <string name="good_login">Zalogowano</string>
     <string name="please_login">Zaloguj się</string>
-    <string name="good_signup">Zarejestrowano</string>
+    <string name="good_register">Zarejestrowano</string>
     <string name="user_exists">Podana nazwa uzytkownika jest już zajęta</string>
     <string name="book_added">Książka została dodana i przypisana do twojego konta</string>
     <string name="book_exists">Książka jest już w bazie. Znajdź ją</string>
     <string name="db_connection_err">Błąd połączenia z bazą danych!</string>
-    <string name="signup_err">Rejestracja nie powiodła się</string>
+    <string name="register_err">Rejestracja nie powiodła się</string>
     <string name="book_added_not_assigned">Ksiażka została dodane, lecz nie została przypisana</string>
     <string name="book_add_err">Książka nie została dodana!</string>
     <string name="system">System</string>
@@ -39,7 +39,7 @@
     <string name="author">Autor:</string>
     <string name="pages">Strony:</string>
     <string name="user_page">Twoja strona:</string>
-    <string name="data_load_err">Błąd przy wczytywaniu danych!</string>
+    <string name="data_load_err">Błąd bazy danych!</string>
     <string name="accept">Akceptuj</string>
     <string name="cancel">Anuluj</string>
     <string name="page_updated">Strona zaktualizowana</string>
@@ -48,4 +48,7 @@
     <string name="assign">Przypisz Książkę</string>
     <string name="book_assigned">Książka przypisana</string>
     <string name="book_assigned_err">Błąd podczas przypisywania książki!</string>
+    <string name="email_exists">Podany email jest już zajęty</string>
+    <string name="pass_lenght">Hasło musi się składać z przynajmniej 6 znaków</string>
+    <string name="email_valid">Wpisz poprawny adres email</string>
 </resources>

@@ -42,6 +42,7 @@ public class MainActivity extends Drawer_base {
 
         MaterialButton base = (MaterialButton) findViewById(R.id.base);
 
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -51,12 +52,18 @@ public class MainActivity extends Drawer_base {
             base.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    boolean check = false;
+
                     db.collection("test")
+                            .whereEqualTo("mes", "orzel")
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
+                                        if (task.getResult().isEmpty()) {
+                                            Toast.makeText(getApplicationContext(), "Walidacja gites", Toast.LENGTH_SHORT).show();
+                                        }
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             Toast.makeText(getApplicationContext(), "Dziala: " + document.getString("mes"), Toast.LENGTH_SHORT).show();
                                         }
@@ -65,6 +72,7 @@ public class MainActivity extends Drawer_base {
                                     }
                                 }
                             });
+
                 }
             });
     }

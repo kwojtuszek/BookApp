@@ -19,6 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,68 +45,84 @@ public class Register extends AppCompatActivity {
         // Funkcja rejestracji
         registerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
 
                 String username, password, email;
                 username = tvUsername.getText().toString();
                 password = tvPassword.getText().toString();
                 email = tvEmail.getText().toString();
+                boolean checkUsername = false;
 
-                if(!username.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
-                    if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                        if (password.length() >= 6) {
+                if (!username.isEmpty() && !password.isEmpty() && !email.isEmpty()) {
 
-                            // Rejestracja w Firebase Authentication
-                            mAuth.createUserWithEmailAndPassword(email, password)
-                                    .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                // Sign in success, update UI with the signed-in user's information
+                    db.collection("users")
+                            .whereEqualTo("username", username)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
 
-                                                //Tworzenie dokumentu użytkownika
-                                                Map<String, Object> user = new HashMap<>();
-                                                user.put("name", username);
-                                                user.put("email", email);
-                                                user.put("level", 1);
-                                                user.put("rated", null);
-                                                user.put("readed", null);
-                                                user.put("reading", null);
+                                        if (task.getResult().isEmpty()) {
+                                            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                                                if (password.length() >= 6) {
 
-                                                // Dodawanie użytkownika do Firestora
-                                                db.collection("users")
-                                                        .add(user)
-                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                            @Override
-                                                            public void onSuccess(DocumentReference documentReference) {
-                                                                Toast.makeText(getApplicationContext(), "działa", Toast.LENGTH_SHORT).show();
-                                                                startActivity(new Intent(Register.this, Login.class));
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(getApplicationContext(), "nie działa", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        });
-                                            } else {
-                                                // If sign in fails, display a message to the user.
-                                                Toast.makeText(getApplicationContext(), "Nie działa", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    });
+                                                    // Rejestracja w Firebase Authentication
+                                                    mAuth.createUserWithEmailAndPassword(email, password)
+                                                            .addOnCompleteListener(Register.this, new OnCompleteListener<AuthResult>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        // Sign in success, update UI with the signed-in user's information
 
-                        } else Toast.makeText(getApplicationContext(), "Hasło musi posiadać conajmniej 6 znaków!", Toast.LENGTH_SHORT).show();
-                    } else Toast.makeText(getApplicationContext(), "Wpisz poprawny adres email!", Toast.LENGTH_SHORT).show();
-                } else Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
+                                                                        //Tworzenie dokumentu użytkownika
+                                                                        Map<String, Object> user = new HashMap<>();
+                                                                        user.put("username", username);
+                                                                        user.put("email", email);
+                                                                        user.put("level", 1);
+                                                                        user.put("rated", null);
+                                                                        user.put("readed", null);
+                                                                        user.put("reading", null);
+
+                                                                        // Dodawanie użytkownika do Firestora
+                                                                        db.collection("users")
+                                                                                .add(user)
+                                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                                    @Override
+                                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                                        Toast.makeText(getApplicationContext(), getString(R.string.good_register), Toast.LENGTH_SHORT).show();
+                                                                                        startActivity(new Intent(Register.this, Login.class));
+                                                                                    }
+                                                                                })
+                                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                                    @Override
+                                                                                    public void onFailure(@NonNull Exception e) {
+                                                                                        Toast.makeText(getApplicationContext(), getString(R.string.register_err), Toast.LENGTH_SHORT).show();
+                                                                                    }
+                                                                                });
+                                                                    } else {
+                                                                        // If sign in fails, display a message to the user.
+                                                                        Toast.makeText(getApplicationContext(), getString(R.string.email_exists), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+
+                                                } else
+                                                    Toast.makeText(getApplicationContext(), getString(R.string.pass_lenght), Toast.LENGTH_SHORT).show();
+                                            } else
+                                                Toast.makeText(getApplicationContext(), getString(R.string.email_valid), Toast.LENGTH_SHORT).show();
+                                        } else
+                                            Toast.makeText(getApplicationContext(), getString(R.string.user_exists), Toast.LENGTH_SHORT).show();
+
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.register_err), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                } else
+                    Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    // Otwarcie aktywności logowania
-    public void openLogin() {
-        Intent intent = new Intent(getApplicationContext(), Login.class);
-        startActivity(intent);
     }
 
 }

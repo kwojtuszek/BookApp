@@ -24,12 +24,12 @@
     <string name="bad_login">Wrong username or password!</string>
     <string name="good_login">Login success</string>
     <string name="please_login">Please login</string>
-    <string name="good_signup">Sing Up success</string>
-    <string name="user_exists">This username is taken!</string>
+    <string name="good_register">Register success</string>
+    <string name="user_exists">This username is already  taken</string>
     <string name="book_added">Book has been added and assigned to your account</string>
     <string name="book_exists">Book already added. Go find it!</string>
     <string name="db_connection_err">Error: Database connection</string>
-    <string name="signup_err">Sign up Failed</string>
+    <string name="register_err">Register failed</string>
     <string name="book_added_not_assigned">Book has been added, but not assigned</string>
     <string name="book_add_err">Book has not been added!</string>
     <string name="system">System</string>
@@ -38,7 +38,7 @@
     <string name="author">Author:</string>
     <string name="pages">Pages:</string>
     <string name="user_page">Your page:</string>
-    <string name="data_load_err">Error while loading data!</string>
+    <string name="data_load_err">Database error!</string>
     <string name="accept">Accept</string>
     <string name="cancel">Cancel</string>
     <string name="page_updated">Page updated</string>
@@ -47,4 +47,7 @@
     <string name="assign">Assign Book</string>
     <string name="book_assigned">Book assigned</string>
     <string name="book_assigned_err">Book assigned failed!</string>
+    <string name="email_exists">This email is already taken</string>
+    <string name="pass_lenght">The password must be at least 6 characters long</string>
+    <string name="email_valid">Enter a valid email address</string>
 </resources>
