@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class Drawer_base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -64,11 +65,13 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("remember", "false");
                 editor.putString("username", "");
+                editor.putString("email", "");
                 editor.putString("id", "");
                 editor.apply();
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+                FirebaseAuth.getInstance().signOut();
                 break;
             case R.id.add_book:
                 startActivity(new Intent(this, AddBook.class));

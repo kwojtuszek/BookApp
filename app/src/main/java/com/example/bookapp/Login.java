@@ -1,5 +1,6 @@
 package com.example.bookapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,15 +12,28 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
 public class Login extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         TextView tvUsername = (TextView) findViewById(R.id.username);
         TextView tvPassword = (TextView) findViewById(R.id.password);
@@ -27,6 +41,8 @@ public class Login extends AppCompatActivity {
         TextView register = (TextView) findViewById(R.id.register);
 
         MaterialButton login = (MaterialButton) findViewById(R.id.login);
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
 
         // Przejście do rejestracji
         register.setOnClickListener(new View.OnClickListener() {
@@ -39,78 +55,79 @@ public class Login extends AppCompatActivity {
         // Sprawdzenie czy nie użytkownik nie jest już zalogowany z wykorzystaniem SharedPreferences
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
         String remember_value = preferences.getString("remember", "");
-        if(remember_value.equals("true")){
+        if (remember_value.equals("true")) {
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
-        } else if(remember_value.equals("false")){
+        } else if (remember_value.equals("false")) {
             Toast.makeText(Login.this, getString(R.string.please_login), Toast.LENGTH_SHORT).show();
         }
 
         // Funkcja odpowiadająca za logowanie
         login.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 String username, password;
-                final String[] id = new String[1];
                 username = tvUsername.getText().toString();
                 password = tvPassword.getText().toString();
 
-                if(!username.equals("") && !password.equals("")) {
-                    //Start ProgressBar first (Set visibility VISIBLE)
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
-                            String[] field = new String[2];
-                            field[0] = "username";
-                            field[1] = "password";
-                            //Creating array for data
-                            String[] data = new String[2];
-                            data[0] = username;
-                            data[1] = password;
-                            PutData putData = new PutData("https://grpcapi.bieda.it/LoginBook/login.php", "POST", field, data);
-                            if (putData.startPut()) {
-                                if (putData.onComplete()) {
-                                    String result = putData.getResult();
-                                    //End ProgressBar (Set visibility to GONE)
-                                    if(result.equals("Login Success")){
-                                        PutData checkId = new PutData("https://grpcapi.bieda.it/LoginBook/checkUserId.php",  "POST", field, data);
-                                        if (checkId.startPut()) {
-                                            if (checkId.onComplete()) {
-                                                id[0] = checkId.getResult();
+                // Sprawdzenie czy wszystkie pola są wypełnione
+                if (!username.equals("") && !password.equals("")) {
+
+                    // Pobranie adresu email po nazwie użytkownika z Firestore
+                    db.collection("users")
+                            .whereEqualTo("username", username)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().isEmpty()) {
+                                            Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            String email = "";
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                                email = document.getString("email");
+
+                                                // Zapisanie danych użytkownika w SharedPreferences
+                                                SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+                                                SharedPreferences.Editor editor = preferences.edit();
+                                                editor.putString("remember", "true");
+                                                editor.putString("username", username);
+                                                editor.putString("email", document.getString("email"));
+                                                editor.putString("id", document.getId());
+                                                editor.apply();
                                             }
+
+                                            // Logowanie użytkownika z wykorzystaniem Firebase Authentication
+                                            mAuth.signInWithEmailAndPassword(email, password)
+                                                    .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                                            if (task.isSuccessful()) {
+                                                                Toast.makeText(getApplicationContext(), getString(R.string.good_login), Toast.LENGTH_SHORT).show();
+                                                                FirebaseUser user = mAuth.getCurrentUser();
+                                                                openMain();
+                                                            } else {
+                                                                Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
                                         }
-
-                                        openMain();
-
-                                        Toast.makeText(getApplicationContext(), getString(R.string.good_login), Toast.LENGTH_SHORT).show();
-                                        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = preferences.edit();
-                                        editor.putString("remember", "true");
-                                        editor.putString("username", username);
-                                        editor.putString("id", id[0]);
-                                        editor.apply();
-                                        finish();
-                                    } else if(result.equals("Username or Password wrong")){
-                                        Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
-                                    } else if(result.equals("Error: Database connection")) {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.db_connection_err), Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                            }
-                            //End Write and Read data with URL
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
+                            });
                 }
             }
         });
 
     }
+
     // Otwarcie aktywności rejestracjo
     public void openRegister() {
         Intent intent = new Intent(this, Register.class);

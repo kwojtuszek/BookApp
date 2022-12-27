@@ -91,7 +91,7 @@ public class Register extends AppCompatActivity {
                                                                                     @Override
                                                                                     public void onSuccess(DocumentReference documentReference) {
                                                                                         Toast.makeText(getApplicationContext(), getString(R.string.good_register), Toast.LENGTH_SHORT).show();
-                                                                                        startActivity(new Intent(Register.this, Login.class));
+                                                                                        openLogin();
                                                                                     }
                                                                                 })
                                                                                 .addOnFailureListener(new OnFailureListener() {
@@ -123,6 +123,12 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Otwarcie aktywności logowania
+    public void openLogin() {
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
     }
 
 }
