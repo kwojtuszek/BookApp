@@ -77,14 +77,16 @@ public class Register extends AppCompatActivity {
                                                                     if (task.isSuccessful()) {
                                                                         // Sign in success, update UI with the signed-in user's information
 
+                                                                        // Tworzenie zagnieżdzonych obiektów Mapy w Firestore
+                                                                        Map<String, Object> book = new HashMap<>();
+
                                                                         //Tworzenie dokumentu użytkownika
                                                                         Map<String, Object> user = new HashMap<>();
                                                                         user.put("username", username);
                                                                         user.put("email", email);
                                                                         user.put("level", 1);
-                                                                        user.put("rated", null);
-                                                                        user.put("readed", null);
-                                                                        user.put("reading", null);
+                                                                        user.put("book", book);
+                                                                        user.put("readed", 0);
 
                                                                         // Dodawanie użytkownika do Firestora
                                                                         db.collection("users")

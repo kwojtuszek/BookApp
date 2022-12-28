@@ -33,9 +33,9 @@ public class MainActivity extends Drawer_base {
         setContentView(activityMainBinding.getRoot());
         allocateActivityTitle("");
 
-        TextView tvwelcome = (TextView) findViewById(R.id.main);
+        TextView tvwelcome = findViewById(R.id.main);
 
-        MaterialButton base = (MaterialButton) findViewById(R.id.base);
+        MaterialButton base = findViewById(R.id.base);
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -49,8 +49,10 @@ public class MainActivity extends Drawer_base {
                 public void onClick(View view) {
                     boolean check = false;
 
-                    db.collection("test")
-                            .whereEqualTo("mes", "orzel")
+                    db.collection("books")
+                            .whereEqualTo("name", "Mleczko")
+                            .whereEqualTo("author", "Krowa")
+                            .whereEqualTo("publisher", "Mleczarnia")
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -60,7 +62,7 @@ public class MainActivity extends Drawer_base {
                                             Toast.makeText(getApplicationContext(), "Walidacja gites", Toast.LENGTH_SHORT).show();
                                         }
                                         for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Toast.makeText(getApplicationContext(), "Dziala: " + document.getString("mes"), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(), "Dziala: " + document.getId(), Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         Toast.makeText(getApplicationContext(), "Nie działa", Toast.LENGTH_SHORT).show();

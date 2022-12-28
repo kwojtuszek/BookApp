@@ -58,4 +58,5 @@
     <string name="email_not_exist">Konto z podanym adresem email nie istnieje</string>
     <string name="publisher">Wydawnictwo</string>
     <string name="year">Rok wydania</string>
+    <string name="pages_validate">Ilość stron oraz rok wydania musi być numerem</string>
 </resources>

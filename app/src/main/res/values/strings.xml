@@ -57,5 +57,6 @@
     <string name="email_not_exist">The account with the specified email address does not exist</string>
     <string name="publisher">Publisher</string>
     <string name="year">Year of publication</string>
+    <string name="pages_validate">Number of pages and year of publication have to be a number</string>
 
 </resources>
