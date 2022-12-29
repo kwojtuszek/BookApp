@@ -5,18 +5,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bookapp.databinding.ActivityYourBooksBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class YourBooks extends Drawer_base {
 
     ActivityYourBooksBinding activityYourBooksBinding;
     RecyclerView recyclerView;
     TextView noUserBooks;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,54 +39,72 @@ public class YourBooks extends Drawer_base {
 
         noUserBooks = findViewById(R.id.no_user_books);
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
 
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
+        DocumentReference user = db.collection("users").document(userId);
+
+        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void run() {
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
-                SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                recyclerView = findViewById(R.id.recyclerView);
+                        recyclerView = findViewById(R.id.recyclerView);
 
-                String[] field = new String[1];
-                field[0] = "userId";
+                        Map<String, Object> userBooks = new HashMap<>();
+                        userBooks = (Map<String, Object>) document.get("book");
+                        Object[] booksIds = userBooks.keySet().toArray();
 
-                String[] data = new String[1];
-                data[0] = preferences.getString("id", "");
+                        Map<String, Object> booksData = new HashMap<>();
 
-                PutData putData = new PutData("https://grpcapi.bieda.it/LoginBook/getUserBooks.php", "POST", field, data);
-                if (putData.startPut()) {
-                    if (putData.onComplete()) {
-                        String result = putData.getResult();
 
-                        String[] books = null;
-                        books = result.split(";");
+                        String[] titles = new String[booksIds.length], pages = new String[booksIds.length],
+                                ids = new String[booksIds.length], actualPage = new String[booksIds.length];
 
-                        if (result == "") {
-                            noUserBooks.setText(getString(R.string.no_user_books));
-                        } else {
+                        for (int i = 0; i < booksIds.length; i++) {
 
-                            String titles[] = new String[books.length / 6], authors[] = new String[books.length / 6],
-                                    pages[] = new String[books.length / 6], eans[] = new String[books.length / 6],
-                                    ids[] = new String[books.length / 6], actualPage[] = new String[books.length / 6];
+                            booksData = (Map<String, Object>) userBooks.get(booksIds[i]);
+                            actualPage[i] = String.valueOf(booksData.get("page"));
+                            ids[i] = String.valueOf(booksIds[i]);
 
-                            int j = 0;
+                            DocumentReference book = db.collection("books").document(String.valueOf(booksIds[i]));
 
-                            for (int i = 0; i < books.length; i += 6) {
-                                titles[j] = books[i];
-                                authors[j] = books[i + 1];
-                                pages[j] = books[i + 2];
-                                eans[j] = books[i + 3];
-                                ids[j] = books[i + 4];
-                                actualPage[j] = books[i + 5];
-                                j++;
-                            }
-                            RecyclerUserBooksAdapter adapter = new RecyclerUserBooksAdapter(YourBooks.this, titles, authors, pages, eans, ids, actualPage);
-                            recyclerView.setAdapter(adapter);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(YourBooks.this));
+                            int finalI = i;
+                            book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+
+                                            titles[finalI] = document.getString("name");
+                                            pages[finalI] = document.getString("pages");
+
+                                            RecyclerUserBooksAdapter adapter = new RecyclerUserBooksAdapter(YourBooks.this, titles, pages, ids, actualPage);
+                                            recyclerView.setAdapter(adapter);
+                                            recyclerView.setLayoutManager(new LinearLayoutManager(YourBooks.this));
+
+                                            Toast.makeText(getApplicationContext(), "Nie działa" + titles[2], Toast.LENGTH_SHORT).show();
+
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                         }
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
                 }
             }
         });

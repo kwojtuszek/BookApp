@@ -2,90 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/yourBooksLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:background="@color/trans"
-    android:id="@+id/yourBooksLayout">
+    android:background="@color/trans">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:padding="20dp"
         app:cardBackgroundColor="@color/trans"
-        android:padding="20dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/semi_trans">
+
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/semi_trans">
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
+                android:padding="1dp"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="8dp"
-                    android:padding="1dp"
-                    android:text="TextView"
-                    android:textColor="@color/white"
-                    android:textSize="24dp"
-                    android:textStyle="bold" />
+            <TextView
+                android:id="@+id/pages"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/author"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/title"
-                    android:layout_marginLeft="8dp"
-                    android:layout_alignParentLeft="true"
-                    android:text="TextView"
-                    android:textColor="@color/white"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/actual_page"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pages"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:gravity="center"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/pages"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/title"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center"
-                    android:layout_marginRight="8dp"
-                    android:textColor="@color/white"
-                    android:text="TextView"
-                    android:textSize="20dp" />
+            <TextView
+                android:id="@+id/ids"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="TextView"
+                android:textSize="23dp" />
 
-                <TextView
-                    android:id="@+id/actual_page"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/pages"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center"
-                    android:layout_marginRight="8dp"
-                    android:textColor="@color/white"
-                    android:text="TextView"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/eans"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/author"
-                    android:textColor="@color/white"
-                    android:layout_marginLeft="8dp"
-                    android:text="TextView"
-                    android:textSize="20dp" />
-
-                <TextView
-                    android:id="@+id/ids"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="TextView"
-                    android:textSize="23dp" />
-
-            </RelativeLayout>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

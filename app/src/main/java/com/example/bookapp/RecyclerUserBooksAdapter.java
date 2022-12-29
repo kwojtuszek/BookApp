@@ -14,21 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserBooksAdapter.viewHolder> {
 
     String titles[];
-    String authors[];
     String pages[];
     String actualPage[];
-    String eans[];
     String ids[];
     Context context;
 
-    public RecyclerUserBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String data5[], String data6[]) {
+    public RecyclerUserBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[]) {
         context = ctx;
         titles = data1;
-        authors = data2;
-        pages = data3;
-        eans = data4;
-        ids = data5;
-        actualPage = data6;
+        pages = data2;
+        ids = data3;
+        actualPage = data4;
     }
 
     @NonNull
@@ -42,10 +38,8 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         holder.title.setText(context.getString(R.string.title) + " " + titles[position]);
-        holder.author.setText(context.getString(R.string.author) + " " + authors[position]);
         holder.pages.setText(context.getString(R.string.pages) + " " + pages[position]);
         holder.actualPage.setText(context.getString(R.string.user_page) + " " + actualPage[position]);
-        holder.ean.setText("EAN: " + eans[position]);
         holder.id.setText(ids[position]);
 
         holder.yourBooksLayout.setOnClickListener(new View.OnClickListener() {
@@ -69,7 +63,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
 
     public class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, pages, author, ean, id, actualPage;
+        TextView title, pages, id, actualPage;
         ConstraintLayout yourBooksLayout;
 
         public viewHolder(@NonNull View itemView) {
@@ -77,8 +71,6 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
             title = itemView.findViewById(R.id.title);
             pages = itemView.findViewById(R.id.pages);
             actualPage = itemView.findViewById(R.id.actual_page);
-            author = itemView.findViewById(R.id.author);
-            ean = itemView.findViewById(R.id.eans);
             id = itemView.findViewById(R.id.ids);
             id.setVisibility(TextView.INVISIBLE);
             yourBooksLayout = itemView.findViewById(R.id.yourBooksLayout);
