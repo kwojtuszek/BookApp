@@ -7,24 +7,28 @@
     tools:context=".YourBooks">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
+
         <TextView
+            android:id="@+id/no_user_books"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/no_user_books"
-            android:text=""
             android:layout_marginTop="20dp"
             android:gravity="center"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="20dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

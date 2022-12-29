@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserBook"
-    android:background="@drawable/backround">
+    android:background="@drawable/backround"
+    tools:context=".UserBook">
 
-        <TextView
+    <TextView
         android:id="@+id/book_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:gravity="center"
         android:padding="1dp"
         android:text="TextView"
@@ -19,63 +19,29 @@
         android:textSize="24dp"
         android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/pages"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/book_title"
-            android:layout_margin="15dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="8dp"
-            android:textColor="@color/white"
-            android:text="TextView"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/actual_page"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/book_title"
-            android:layout_margin="15dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="8dp"
-            android:textColor="@color/white"
-            android:text="TextView"
-            android:textSize="20dp" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/CircularDeterminateProgressBar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:progress="60" />
 
 
-        <NumberPicker
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.Picker"
-            android:id="@+id/number_picker"
-            android:layout_below="@+id/book_title"
-            android:layout_marginLeft="175dp"
-            android:layout_marginTop="50dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/accept"
-            android:layout_below="@+id/number_picker"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="8dp"
-            android:text="@string/accept"
-            android:backgroundTint="#AAAA"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            />
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/cancel"
-            android:layout_below="@+id/number_picker"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="8dp"
-            android:text="@string/cancel"
-            android:backgroundTint="#AAAA"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            />
+    <TextView
+        android:id="@+id/page_pages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+        app:layout_constraintStart_toStartOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/progress_bar" />
 
 </RelativeLayout>

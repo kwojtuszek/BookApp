@@ -38,10 +38,10 @@ public class Login extends AppCompatActivity {
         TextView tvUsername = findViewById(R.id.username);
         TextView tvPassword =  findViewById(R.id.password);
 
-        TextView register = (TextView) findViewById(R.id.register);
-        TextView forgotpass = (TextView) findViewById(R.id.forgotpass);
+        TextView register = findViewById(R.id.register);
+        TextView forgotpass = findViewById(R.id.forgotpass);
 
-        MaterialButton login = (MaterialButton) findViewById(R.id.login);
+        MaterialButton login = findViewById(R.id.login);
 
         // Przejście do rejestracji
         register.setOnClickListener(new View.OnClickListener() {

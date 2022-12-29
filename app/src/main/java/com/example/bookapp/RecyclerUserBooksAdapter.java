@@ -32,11 +32,11 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.activity_recycler_user_books_row, parent, false);
-        return new viewHolder(view);
+        return new RecyclerUserBooksAdapter.viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull  RecyclerUserBooksAdapter.viewHolder holder, int position) {
         holder.title.setText(context.getString(R.string.title) + " " + titles[position]);
         holder.pages.setText(context.getString(R.string.pages) + " " + pages[position]);
         holder.actualPage.setText(context.getString(R.string.user_page) + " " + actualPage[position]);
@@ -61,7 +61,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
         return titles.length;
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder {
+    public static class viewHolder extends RecyclerView.ViewHolder {
 
         TextView title, pages, id, actualPage;
         ConstraintLayout yourBooksLayout;

@@ -59,4 +59,6 @@
     <string name="publisher">Wydawnictwo</string>
     <string name="year">Rok wydania</string>
     <string name="pages_validate">Ilość stron oraz rok wydania musi być numerem</string>
+    <string name="page_question">Na której stronie jesteś?</string>
+    <string name="actual_page_err">Ostatnia czytana strona musi być mniejsza od wszystkich stron książki!</string>
 </resources>

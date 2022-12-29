@@ -58,5 +58,7 @@
     <string name="publisher">Publisher</string>
     <string name="year">Year of publication</string>
     <string name="pages_validate">Number of pages and year of publication have to be a number</string>
+    <string name="page_question">On which page are you?</string>
+    <string name="actual_page_err">The last page read must be smaller than all the pages of the book!</string>
 
 </resources>

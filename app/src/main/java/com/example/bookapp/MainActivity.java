@@ -33,6 +33,8 @@ public class MainActivity extends Drawer_base {
     String [] ids = null;
     String [] actualPage = null;
 
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     ActivityMainBinding activityMainBinding;
 
     @Override
@@ -57,79 +59,87 @@ public class MainActivity extends Drawer_base {
                 @Override
                 public void onClick(View view) {
 
-                    SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                    String userId = preferences.getString("id", "");
+                    String id = "iwFsWVilndeWoBF3PNZ2";
+
+                    db.collection("users").document(userId)
+                            .update(
+                                    "book." + id + ".page", 12
+                            );
 
 
-                    DocumentReference user = db.collection("users").document(userId);
-
-                    user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-
-                                    Map<String, Object> userBooks = new HashMap<>();
-                                    userBooks = (Map<String, Object>) document.get("book");
-                                    Object[] booksIds = userBooks.keySet().toArray();
-
-                                    Map<String, Object> booksData = new HashMap<>();
-
-                                    titles = new String[booksIds.length];
-                                    pages = new String[booksIds.length];
-                                    ids = new String[booksIds.length];
-                                    actualPage = new String[booksIds.length];
-
-                                    int i;
-
-                                    for (i = 0; i <= 1; i++) {
-
-                                        booksData = (Map<String, Object>) userBooks.get(booksIds[i]);
-                                        actualPage[i] = String.valueOf(booksData.get("page"));
-                                        ids[i] = String.valueOf(booksIds[i]);
-
-                                        DocumentReference book = db.collection("books").document(String.valueOf(booksIds[i]));
-
-                                        int finalI = i;
-                                        book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if (task.isSuccessful()) {
-                                                    DocumentSnapshot document = task.getResult();
-                                                    if (document.exists()) {
-
-                                                        titles[finalI] = document.getString("name");
-
-//                                                        Toast.makeText(getApplicationContext(), "To ma byc 1 " + titles[finalI], Toast.LENGTH_SHORT).show();
-
-                                                        pages[finalI] = "dupa";
-
-
-
-                                                    } else {
-                                                        Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                    }
-                                    if (i >= booksIds.length) {
-                                        Toast.makeText(getApplicationContext(), "Dupa " + titles[1], Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
-
-                    Toast.makeText(getApplicationContext(), "Giga test " + titles[1], Toast.LENGTH_SHORT).show();
+//                    SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+//                    String userId = preferences.getString("id", "");
+//
+//
+//                    DocumentReference user = db.collection("users").document(userId);
+//
+//                    user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                DocumentSnapshot document = task.getResult();
+//                                if (document.exists()) {
+//
+//                                    Map<String, Object> userBooks = new HashMap<>();
+//                                    userBooks = (Map<String, Object>) document.get("book");
+//                                    Object[] booksIds = userBooks.keySet().toArray();
+//
+//                                    Map<String, Object> booksData = new HashMap<>();
+//
+//                                    titles = new String[booksIds.length];
+//                                    pages = new String[booksIds.length];
+//                                    ids = new String[booksIds.length];
+//                                    actualPage = new String[booksIds.length];
+//
+//                                    int i;
+//
+//                                    for (i = 0; i <= 1; i++) {
+//
+//                                        booksData = (Map<String, Object>) userBooks.get(booksIds[i]);
+//                                        actualPage[i] = String.valueOf(booksData.get("page"));
+//                                        ids[i] = String.valueOf(booksIds[i]);
+//
+//                                        DocumentReference book = db.collection("books").document(String.valueOf(booksIds[i]));
+//
+//                                        int finalI = i;
+//                                        book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                                                if (task.isSuccessful()) {
+//                                                    DocumentSnapshot document = task.getResult();
+//                                                    if (document.exists()) {
+//
+//                                                        titles[finalI] = document.getString("name");
+//
+////                                                        Toast.makeText(getApplicationContext(), "To ma byc 1 " + titles[finalI], Toast.LENGTH_SHORT).show();
+//
+//                                                        pages[finalI] = "dupa";
+//
+//
+//
+//                                                    } else {
+//                                                        Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                } else {
+//                                                    Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//                                        });
+//                                    }
+//                                    if (i >= booksIds.length) {
+//                                        Toast.makeText(getApplicationContext(), "Dupa " + titles[1], Toast.LENGTH_SHORT).show();
+//                                    }
+//                                } else {
+//                                    Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
+//                                }
+//                            } else {
+//                                Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    });
+//
+//
+//                    Toast.makeText(getApplicationContext(), "Giga test " + titles[1], Toast.LENGTH_SHORT).show();
 
 
 //                    boolean check = false;
@@ -178,5 +188,11 @@ public class MainActivity extends Drawer_base {
 
                 }
             });
+    }
+
+    public void button() {
+
+        Toast.makeText(getApplicationContext(), "Trap Card", Toast.LENGTH_SHORT).show();
+
     }
 }

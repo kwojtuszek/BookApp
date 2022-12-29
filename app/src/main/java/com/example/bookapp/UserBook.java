@@ -1,30 +1,41 @@
 package com.example.bookapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookapp.databinding.ActivityUserBookBinding;
 import com.example.bookapp.databinding.ActivityYourBooksBinding;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
 import org.w3c.dom.Text;
 
-public class UserBook extends Drawer_base implements NumberPicker.OnValueChangeListener {
+public class UserBook extends Drawer_base {
 
     String title, id, pages, actualPage;
-    TextView tvTitle, tvPages, tvActualPage;
-    MaterialButton acceptbtn, cancelbtn;
+    TextView tvTitle, tvPagePages;
+    int progress;
+    MaterialButton readedbtn;
+    ProgressBar progress_bar;
     ActivityUserBookBinding activityUserBookBinding;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,72 +45,19 @@ public class UserBook extends Drawer_base implements NumberPicker.OnValueChangeL
         allocateActivityTitle("");
 
         tvTitle = findViewById(R.id.book_title);
-        tvPages = findViewById(R.id.pages);
-        tvActualPage = findViewById(R.id.actual_page);
-
-        acceptbtn = findViewById(R.id.accept);
-        cancelbtn = findViewById(R.id.cancel);
+        tvPagePages= findViewById(R.id.page_pages);
+        progress_bar = findViewById(R.id.progress_bar);
 
         getData();
         setData();
 
-        NumberPicker numberPicker = findViewById(R.id.number_picker);
-        numberPicker.setMinValue(0);
-        numberPicker.setMaxValue(Integer.parseInt(pages));
-        numberPicker.setValue(Integer.parseInt(actualPage));
-        numberPicker.setOnValueChangedListener(this);
-
-        acceptbtn.setOnClickListener(new View.OnClickListener() {
+        tvPagePages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Handler handler = new Handler(Looper.getMainLooper());
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-
-                        String[] field = new String[3];
-                        field[0] = "userId";
-                        field[1] = "bookId";
-                        field[2] = "page";
-
-                        String[] data = new String[3];
-                        data[0] = preferences.getString("id", "");
-                        data[1] = id;
-                        data[2] = actualPage;
-
-                        PutData putData = new PutData("https://grpcapi.bieda.it/LoginBook/updatePage.php", "POST", field, data);
-                        if (putData.startPut()) {
-                            if (putData.onComplete()) {
-                                String result = putData.getResult();
-                                if(result.equals("Update Success")){
-                                    Toast.makeText(getApplicationContext(), getString(R.string.page_updated), Toast.LENGTH_SHORT).show();
-                                    openYourBooks();
-                                } else if (result.equals("Update Failed")) {
-                                    Toast.makeText(getApplicationContext(), getString(R.string.page_updated_err), Toast.LENGTH_SHORT).show();
-                                    openYourBooks();
-                                } else if(result.equals("Error: Database connection")) {
-                                    Toast.makeText(getApplicationContext(), getString(R.string.db_connection_err), Toast.LENGTH_SHORT).show();
-                                    openYourBooks();
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        });
-
-        cancelbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openYourBooks();
+                pageChange();
             }
         });
     }
-
-
 
     private void getData() {
         if (getIntent().hasExtra("titles") && getIntent().hasExtra("ids") && getIntent().hasExtra("pages") &&
@@ -118,20 +76,56 @@ public class UserBook extends Drawer_base implements NumberPicker.OnValueChangeL
     private void setData() {
 
         tvTitle.setText(title);
-        tvPages.setText(getString(R.string.pages) + " " + pages);
-        tvActualPage.setText(getString(R.string.user_page) + " " + actualPage);
-    }
+        tvPagePages.setText(actualPage + "/" + pages);
 
-    @Override
-    public void onValueChange(NumberPicker numberPicker, int i, int i1) {
+        progress = (Integer.parseInt(actualPage)*100)/Integer.parseInt(pages);
 
-        tvActualPage.setText(getString(R.string.user_page) + " " + i1);
-        actualPage = String.valueOf(i1);
+        progress_bar.setProgress(progress);
 
     }
 
-    public void openYourBooks() {
-        Intent intent = new Intent(this, YourBooks.class);
-        startActivity(intent);
+    public void pageChange() {
+
+        AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(UserBook.this);
+        pageChangeDialog.setTitle(getString(R.string.page_question));
+
+        final EditText lastPageInput = new EditText(UserBook.this);
+        lastPageInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        pageChangeDialog.setView(lastPageInput);
+
+        pageChangeDialog.setPositiveButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                if (Integer.parseInt(lastPageInput.getText().toString()) < Integer.parseInt(pages)) {
+
+                    SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+                    String userId = preferences.getString("id", "");
+
+                    actualPage = lastPageInput.getText().toString();
+
+                    db.collection("users").document(userId)
+                            .update(
+                                    "book." + id + ".page", actualPage
+                            );
+
+                    setData();
+                } else Toast.makeText(getApplicationContext(), getString(R.string.actual_page_err), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        pageChangeDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                dialogInterface.cancel();
+            }
+        });
+
+        pageChangeDialog.show();
     }
+
+
+
 }

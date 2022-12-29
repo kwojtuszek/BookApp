@@ -25,4 +25,9 @@
     <style name="Theme.BookApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="Theme.BookApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="CircularDeterminateProgressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/circle</item>
+    </style>
+
 </resources>
