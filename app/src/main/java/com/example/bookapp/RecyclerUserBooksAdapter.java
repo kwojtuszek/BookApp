@@ -16,15 +16,17 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
     String titles[];
     String pages[];
     String actualPage[];
+    String author[];
     String ids[];
     Context context;
 
-    public RecyclerUserBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[]) {
+    public RecyclerUserBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
         context = ctx;
         titles = data1;
         pages = data2;
         ids = data3;
         actualPage = data4;
+        author = data5;
     }
 
     @NonNull
@@ -37,9 +39,10 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
 
     @Override
     public void onBindViewHolder(@NonNull  RecyclerUserBooksAdapter.viewHolder holder, int position) {
-        holder.title.setText(context.getString(R.string.title) + " " + titles[position]);
+        holder.title.setText(titles[position]);
         holder.pages.setText(context.getString(R.string.pages) + " " + pages[position]);
         holder.actualPage.setText(context.getString(R.string.user_page) + " " + actualPage[position]);
+        holder.author.setText(author[position]);
         holder.id.setText(ids[position]);
 
         holder.yourBooksLayout.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +53,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
                 intent.putExtra("ids", ids[position]);
                 intent.putExtra("pages", pages[position]);
                 intent.putExtra("actualPage", actualPage[position]);
+                intent.putExtra("author", author[position]);
                 context.startActivity(intent);
             }
         });
@@ -63,7 +67,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, pages, id, actualPage;
+        TextView title, pages, id, actualPage, author;
         ConstraintLayout yourBooksLayout;
 
         public viewHolder(@NonNull View itemView) {
@@ -71,6 +75,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
             title = itemView.findViewById(R.id.title);
             pages = itemView.findViewById(R.id.pages);
             actualPage = itemView.findViewById(R.id.actual_page);
+            author = itemView.findViewById(R.id.author);
             id = itemView.findViewById(R.id.ids);
             id.setVisibility(TextView.INVISIBLE);
             yourBooksLayout = itemView.findViewById(R.id.yourBooksLayout);

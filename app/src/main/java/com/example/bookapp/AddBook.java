@@ -122,7 +122,7 @@ public class AddBook extends Drawer_base {
                                                                                     Map<String, Object> bookData = new HashMap<>();
                                                                                     bookData.put("rate", 0);
                                                                                     bookData.put("page", 1);
-                                                                                    bookData.put("reads", 1);
+                                                                                    bookData.put("reads", 0);
 
                                                                                     // Klucz mapy do znalezienia przypisanych danych
                                                                                     Map<String, Object> preparedBook = new HashMap<>();

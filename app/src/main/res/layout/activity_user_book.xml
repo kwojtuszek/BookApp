@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backround"
     tools:context=".UserBook">
 
     <TextView
@@ -18,6 +17,18 @@
         android:textColor="@color/white"
         android:textSize="24dp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/book_title"
+        android:gravity="center"
+        android:padding="1dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -43,5 +54,16 @@
         app:layout_constraintEnd_toEndOf="@+id/progress_bar"
         app:layout_constraintStart_toStartOf="@+id/progress_bar"
         app:layout_constraintTop_toTopOf="@+id/progress_bar" />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/readedbtn"
+        android:layout_below="@+id/progress_bar"
+        android:text="@string/readed"
+        android:backgroundTint="#AAAA"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        />
 
 </RelativeLayout>

@@ -41,9 +41,20 @@
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
+            <TextView
+                android:id="@+id/author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/title"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/pages"
+                android:id="@+id/actual_page"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
@@ -55,16 +66,17 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/actual_page"
+                android:id="@+id/pages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/pages"
+                android:layout_below="@+id/actual_page"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp"
                 android:gravity="center"
                 android:text="TextView"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
+
 
             <TextView
                 android:id="@+id/ids"

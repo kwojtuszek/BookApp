@@ -64,44 +64,56 @@ public class YourBooks extends Drawer_base {
                         Object[] booksIds = userBooks.keySet().toArray();
 
                         Map<String, Object> booksData = new HashMap<>();
+                        ArrayList check = new ArrayList<>();
 
-                        String[] titles = new String[booksIds.length], pages = new String[booksIds.length],
-                                ids = new String[booksIds.length], actualPage = new String[booksIds.length];
+                        for (int j = 0; j < booksIds.length; j++) {
+                            booksData = (Map<String, Object>) userBooks.get(booksIds[j]);
 
-                        if (booksIds.length != 0) {
-
-                            for (int i = 0; i < booksIds.length; i++) {
-
-                                booksData = (Map<String, Object>) userBooks.get(booksIds[i]);
-                                actualPage[i] = String.valueOf(booksData.get("page"));
-                                ids[i] = String.valueOf(booksIds[i]);
-
-                                DocumentReference book = db.collection("books").document(String.valueOf(booksIds[i]));
-
-                                int finalI = i;
-                                book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-
-                                                titles[finalI] = document.getString("name");
-                                                pages[finalI] = document.getString("pages");
-
-                                                RecyclerUserBooksAdapter adapter = new RecyclerUserBooksAdapter(YourBooks.this, titles, pages, ids, actualPage);
-                                                recyclerView.setAdapter(adapter);
-                                                recyclerView.setLayoutManager(new LinearLayoutManager(YourBooks.this));
-
-                                            } else {
-                                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err) + userId, Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                            if (Integer.parseInt(String.valueOf(booksData.get("page"))) != 0) {
+                                check.add(booksIds[j]);
                             }
+                        }
+
+                        String[] titles = new String[check.size()], pages = new String[check.size()],
+                                ids = new String[check.size()], actualPage = new String[check.size()],
+                                author = new String[check.size()];
+
+                        if (check.size() != 0) {
+
+                            for (int i = 0; i < check.size(); i++) {
+
+                                    booksData = (Map<String, Object>) userBooks.get(check.get(i));
+
+                                    actualPage[i] = String.valueOf(booksData.get("page"));
+                                    ids[i] = String.valueOf(check.get(i));
+
+                                    DocumentReference book = db.collection("books").document(String.valueOf(check.get(i)));
+
+                                    int finalI = i;
+                                    book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+
+                                                    titles[finalI] = document.getString("name");
+                                                    pages[finalI] = document.getString("pages");
+                                                    author[finalI] = document.getString("author");
+
+                                                    RecyclerUserBooksAdapter adapter = new RecyclerUserBooksAdapter(YourBooks.this, titles, pages, ids, actualPage, author);
+                                                    recyclerView.setAdapter(adapter);
+                                                    recyclerView.setLayoutManager(new LinearLayoutManager(YourBooks.this));
+
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), getString(R.string.data_load_err) + userId, Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
                         } else noUserBooks.setText(getString(R.string.no_user_books));
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
