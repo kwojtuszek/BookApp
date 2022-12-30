@@ -62,4 +62,7 @@
     <string name="page_question">Na której stronie jesteś?</string>
     <string name="actual_page_err">Ostatnia czytana strona musi być mniejsza od wszystkich stron książki!</string>
     <string name="readed">Przeczytano</string>
+    <string name="rate">Oceń</string>
+    <string name="rate_book">Oceń Książkę</string>
+    <string name="rate_book_validate">Ocena książki musi być większa od 0!</string>
 </resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/backround"
+    tools:context=".RateBook">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratebook"
+        android:text="@string/rate_book"
+        android:textColor="@color/white"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:layout_margin="50dp"
+        android:gravity="center"/>
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ratebook"
+        android:id="@+id/ratingbar"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:layout_centerInParent="true"
+        android:theme="@style/RatingBar"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratebtn"
+        android:layout_below="@+id/ratingbar"
+        android:text="@string/rate"
+        android:backgroundTint="#AAAA"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="30dp"
+        />
+
+</RelativeLayout>

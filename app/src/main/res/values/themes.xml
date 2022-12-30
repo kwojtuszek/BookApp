@@ -30,4 +30,9 @@
         <item name="android:progressDrawable">@drawable/circle</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#FFFFFFFF</item>
+        <item name="colorControlActivated">#FF6200EE</item>
+    </style>
+
 </resources>

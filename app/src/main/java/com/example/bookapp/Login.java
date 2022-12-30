@@ -104,9 +104,12 @@ public class Login extends AppCompatActivity {
                                                 editor.putString("remember", "true");
                                                 editor.putString("username", username);
                                                 editor.putString("email", document.getString("email"));
+                                                editor.putInt("level", (document.getLong("level")).intValue());
+                                                editor.putInt("readed", (document.getLong("readed")).intValue());
                                                 editor.putString("id", document.getId());
                                                 editor.apply();
                                             }
+
 
                                             // Logowanie użytkownika z wykorzystaniem Firebase Authentication
                                             mAuth.signInWithEmailAndPassword(email, password)
@@ -132,8 +135,6 @@ public class Login extends AppCompatActivity {
             }
         });
     }
-
-
 
     // Otwarcie aktywności rejestracjo
     public void openRegister() {

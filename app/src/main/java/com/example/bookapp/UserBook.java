@@ -2,36 +2,26 @@ package com.example.bookapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.InputType;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookapp.databinding.ActivityUserBookBinding;
-import com.example.bookapp.databinding.ActivityYourBooksBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +62,9 @@ public class UserBook extends Drawer_base {
         readedbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 bookFinished();
+
             }
         });
     }
@@ -150,6 +142,15 @@ public class UserBook extends Drawer_base {
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
         String userId = preferences.getString("id", "");
+        int readed = preferences.getInt("readed", 0) + 1;
+        int userLevel = preferences.getInt("level", 1);
+
+        int actualLevel = levelUp(userLevel, readed);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("readed", readed);
+        editor.putInt("level", actualLevel);
+        editor.apply();
 
         DocumentReference user = db.collection("users").document(userId);
 
@@ -160,25 +161,20 @@ public class UserBook extends Drawer_base {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        int reads;
-                        Map<String, Object> userBooks = new HashMap<>();
-
-                        userBooks = (Map<String, Object>) document.get("book");
-                        Map<String, Object> booksData = new HashMap<>();
-                        booksData = (Map<String, Object>) userBooks.get(id);
-
-                        reads = (Integer.parseInt(String.valueOf(booksData.get("reads")))) + 1;
+                        int bookReads = document.getLong("book." + id + ".reads").intValue() + 1;
 
                         db.collection("users").document(userId)
                                 .update(
                                         "book." + id + ".page", 0,
-                                        "book." + id + ".reads", reads
+                                        "book." + id + ".reads", bookReads,
+                                        "level", actualLevel,
+                                        "readed", readed
                                 );
 
-                        if (Integer.parseInt(String.valueOf(booksData.get("rate"))) != 0) {
-                            Toast.makeText(getApplicationContext(), "Losowe", Toast.LENGTH_SHORT).show();
-                        } else {
+                        if (document.getLong("book." + id + ".rate") != 0) {
                             openYourBooks();
+                        } else {
+                            openRateBook();
                         }
                     } else
                         Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
@@ -188,8 +184,55 @@ public class UserBook extends Drawer_base {
         });
     }
 
+    public int levelUp(int actualLevel, int readed) {
+
+        switch (readed) {
+            case 10:
+                actualLevel = 2;
+                break;
+            case 20:
+                actualLevel = 3;
+                break;
+            case 30:
+                actualLevel = 4;
+                break;
+            case 40:
+                actualLevel = 5;
+                break;
+            case 50:
+                actualLevel = 6;
+                break;
+            case 60:
+                actualLevel = 7;
+                break;
+            case 70:
+                actualLevel = 8;
+                break;
+            case 80:
+                actualLevel = 9;
+                break;
+            case 100:
+                actualLevel = 10;
+                break;
+        }
+
+        return actualLevel;
+    }
+
+
+
     public void openYourBooks() {
         Intent intent = new Intent(getApplicationContext(), YourBooks.class);
+        startActivity(intent);
+    }
+
+    public void openRateBook() {
+        SharedPreferences passBookId = getSharedPreferences("book_id", MODE_PRIVATE);
+        SharedPreferences.Editor editor = passBookId.edit();
+        editor.putString("bookId", id);
+        editor.apply();
+
+        Intent intent = new Intent(getApplicationContext(), RateBook.class);
         startActivity(intent);
     }
 

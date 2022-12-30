@@ -61,5 +61,8 @@
     <string name="page_question">On which page are you?</string>
     <string name="actual_page_err">The last page read must be smaller than all the pages of the book!</string>
     <string name="readed">Readed</string>
+    <string name="rate">Rate</string>
+    <string name="rate_book">Rate Book</string>
+    <string name="rate_book_validate">The book rating must be greater than 0!</string>
 
 </resources>
