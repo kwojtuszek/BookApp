@@ -101,8 +101,9 @@ public class UserBook extends Drawer_base {
         AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(UserBook.this);
         pageChangeDialog.setTitle(getString(R.string.page_question));
 
-        final EditText lastPageInput = new EditText(UserBook.this);
+        EditText lastPageInput = new EditText(UserBook.this);
         lastPageInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        lastPageInput.setText(actualPage, TextView.BufferType.EDITABLE);
 
         pageChangeDialog.setView(lastPageInput);
 
@@ -110,6 +111,9 @@ public class UserBook extends Drawer_base {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                if (lastPageInput.getText().toString().isEmpty() || Integer.parseInt(lastPageInput.getText().toString()) == 0) {
+                    dialogInterface.cancel();
+                } else {
                 if (Integer.parseInt(lastPageInput.getText().toString()) < Integer.parseInt(pages)) {
 
                     SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -119,21 +123,23 @@ public class UserBook extends Drawer_base {
 
                     db.collection("users").document(userId)
                             .update(
-                                    "book." + id + ".page", actualPage
+                                    "book." + id + ".page", Integer.parseInt(actualPage)
                             );
 
                     setData();
-                } else Toast.makeText(getApplicationContext(), getString(R.string.actual_page_err), Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), getString(R.string.actual_page_err), Toast.LENGTH_SHORT).show();
+            }
             }
         });
 
-        pageChangeDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-                dialogInterface.cancel();
-            }
-        });
+//        pageChangeDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                dialogInterface.cancel();
+//            }
+//        });
 
         pageChangeDialog.show();
     }

@@ -13,6 +13,10 @@
                     android:icon="@drawable/ic_baseline_menu_book_24"
                     android:title="@string/user_books" />
 
+                <item android:id="@+id/readed_books"
+                    android:icon="@drawable/ic_baseline_done_outline_24"
+                    android:title="Przeczytane" />
+
                 <item android:id="@+id/add_book"
                     android:icon="@drawable/ic_baseline_add_24"
                     android:title="@string/add_book" />

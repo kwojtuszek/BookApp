@@ -12,7 +12,7 @@
     <string name="email">Email</string>
     <string name="drawer_open">Otwórz</string>
     <string name="drawer_close">Zamknij</string>
-    <string name="user_books">Twoje książki</string>
+    <string name="user_books">Czytane książki</string>
     <string name="main_page">Strona główna</string>
     <string name="add_book">Dodaj książkę</string>
     <string name="find_book">Znajdź książkę</string>
@@ -65,4 +65,7 @@
     <string name="rate">Oceń</string>
     <string name="rate_book">Oceń Książkę</string>
     <string name="rate_book_validate">Ocena książki musi być większa od 0!</string>
+    <string name="readed_row">Przeczytano:</string>
+    <string name="amount">razy</string>
+    <string name="user_rate">Twoja ocena</string>
 </resources>

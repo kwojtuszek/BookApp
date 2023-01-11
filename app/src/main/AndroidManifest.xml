@@ -19,7 +19,6 @@
         <activity
             android:name=".UserBook"
             android:exported="false"
-            android:parentActivityName=".YourBooks"
             android:screenOrientation="portrait" />
         <activity
             android:name=".FindBook"
@@ -31,6 +30,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".YourBooks"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ReadedBooks"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

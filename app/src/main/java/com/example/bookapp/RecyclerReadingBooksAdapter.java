@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserBooksAdapter.viewHolder> {
+public class RecyclerReadingBooksAdapter extends RecyclerView.Adapter<RecyclerReadingBooksAdapter.viewHolder> {
 
     String titles[];
     String pages[];
@@ -20,7 +20,7 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
     String ids[];
     Context context;
 
-    public RecyclerUserBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
+    public RecyclerReadingBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
         context = ctx;
         titles = data1;
         pages = data2;
@@ -34,11 +34,11 @@ public class RecyclerUserBooksAdapter extends RecyclerView.Adapter<RecyclerUserB
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.activity_recycler_user_books_row, parent, false);
-        return new RecyclerUserBooksAdapter.viewHolder(view);
+        return new RecyclerReadingBooksAdapter.viewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  RecyclerUserBooksAdapter.viewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull  RecyclerReadingBooksAdapter.viewHolder holder, int position) {
         holder.title.setText(titles[position]);
         holder.pages.setText(context.getString(R.string.pages) + " " + pages[position]);
         holder.actualPage.setText(context.getString(R.string.user_page) + " " + actualPage[position]);

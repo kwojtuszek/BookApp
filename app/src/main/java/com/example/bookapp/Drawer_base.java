@@ -60,6 +60,10 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
                 startActivity(new Intent(this, FindBook.class));
                 overridePendingTransition(0,0);
                 break;
+            case R.id.readed_books:
+                startActivity(new Intent(this, ReadedBooks.class));
+                overridePendingTransition(0,0);
+                break;
             case R.id.logout:
                 SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();

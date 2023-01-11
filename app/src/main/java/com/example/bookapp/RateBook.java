@@ -8,7 +8,6 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -16,6 +15,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.DecimalFormat;
 
 public class RateBook extends Drawer_base {
 
@@ -77,6 +78,7 @@ public class RateBook extends Drawer_base {
                             if (checkIfFirstRate != 0) {
                                 //Zmiana oceny
 
+                                DecimalFormat decfor = new DecimalFormat("0.00");
                                 DocumentReference book = db.collection("books").document(bookId);
 
                                 book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -89,7 +91,7 @@ public class RateBook extends Drawer_base {
                                                 rates = (document.getLong("rates").intValue());
                                                 bookRate = document.getLong("rate");
 
-                                                bookRate = ((bookRate - oldUserRate) + userRate) / rates;
+                                                bookRate = Math.round((((bookRate - oldUserRate) + userRate) / rates) * 100) / 100;
 
                                                 db.collection("books").document(bookId)
                                                         .update(
@@ -123,7 +125,7 @@ public class RateBook extends Drawer_base {
                                                 rates = (document.getLong("rates").intValue()) + 1;
                                                 bookRate = document.getLong("rate");
 
-                                                bookRate = (bookRate + userRate) / rates;
+                                                bookRate = Math.round(((bookRate + userRate) / rates * 100)) / 100;
 
                                                 db.collection("books").document(bookId)
                                                         .update(

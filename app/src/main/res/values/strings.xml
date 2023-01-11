@@ -11,7 +11,7 @@
     <string name="email">Email</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="user_books">Your books</string>
+    <string name="user_books">Now reading</string>
     <string name="main_page">Main page</string>
     <string name="add_book">Add Book</string>
     <string name="find_book">Find book</string>
@@ -64,5 +64,8 @@
     <string name="rate">Rate</string>
     <string name="rate_book">Rate Book</string>
     <string name="rate_book_validate">The book rating must be greater than 0!</string>
+    <string name="readed_row">Readed:</string>
+    <string name="amount">times</string>
+    <string name="user_rate">Your rate</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.bookapp;
 
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bookapp.databinding.ActivityYourBooksBinding;
+import com.example.bookapp.databinding.ActivityReadedBooksBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,17 +21,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class YourBooks extends Drawer_base {
 
-    ActivityYourBooksBinding activityYourBooksBinding;
+public class ReadedBooks extends Drawer_base {
+
+    ActivityReadedBooksBinding activityReadedBooksBinding;
     RecyclerView recyclerView;
     TextView noUserBooks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityYourBooksBinding = ActivityYourBooksBinding.inflate(getLayoutInflater());
-        setContentView(activityYourBooksBinding.getRoot());
+        activityReadedBooksBinding = ActivityReadedBooksBinding.inflate(getLayoutInflater());
+        setContentView(activityReadedBooksBinding.getRoot());
         allocateActivityTitle("");
 
         startView();
@@ -65,51 +67,52 @@ public class YourBooks extends Drawer_base {
                         for (int j = 0; j < booksIds.length; j++) {
                             booksData = (Map<String, Object>) userBooks.get(booksIds[j]);
 
-                            if (Integer.parseInt(String.valueOf(booksData.get("page"))) != 0) {
+                            if (Integer.parseInt(String.valueOf(booksData.get("reads"))) != 0) {
                                 check.add(booksIds[j]);
                             }
                         }
 
-                        String[] titles = new String[check.size()], pages = new String[check.size()],
+                        String[] titles = new String[check.size()], reads = new String[check.size()],
                                 ids = new String[check.size()], actualPage = new String[check.size()],
-                                author = new String[check.size()];
+                                author = new String[check.size()], userRates = new String[check.size()];
 
                         if (check.size() != 0) {
 
                             for (int i = 0; i < check.size(); i++) {
 
-                                    booksData = (Map<String, Object>) userBooks.get(check.get(i));
+                                booksData = (Map<String, Object>) userBooks.get(check.get(i));
 
-                                    actualPage[i] = String.valueOf(booksData.get("page"));
-                                    ids[i] = String.valueOf(check.get(i));
+                                actualPage[i] = String.valueOf(booksData.get("page"));
+                                reads[i] = String.valueOf(booksData.get("reads"));
+                                userRates[i] = String.valueOf(booksData.get("rate"));
+                                ids[i] = String.valueOf(check.get(i));
 
-                                    DocumentReference book = db.collection("books").document(String.valueOf(check.get(i)));
+                                DocumentReference book = db.collection("books").document(String.valueOf(check.get(i)));
 
-                                    int finalI = i;
-                                    book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
+                                int finalI = i;
+                                book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
 
-                                                    titles[finalI] = document.getString("name");
-                                                    pages[finalI] = document.getString("pages");
-                                                    author[finalI] = document.getString("author");
+                                                titles[finalI] = document.getString("name");
+                                                author[finalI] = document.getString("author");
 
-                                                    RecyclerReadingBooksAdapter adapter = new RecyclerReadingBooksAdapter(YourBooks.this, titles, pages, ids, actualPage, author);
-                                                    recyclerView.setAdapter(adapter);
-                                                    recyclerView.setLayoutManager(new LinearLayoutManager(YourBooks.this));
+                                                RecyclerReadedBooksAdapter adapter = new RecyclerReadedBooksAdapter(ReadedBooks.this, titles, reads, ids, actualPage, author, userRates);
+                                                recyclerView.setAdapter(adapter);
+                                                recyclerView.setLayoutManager(new LinearLayoutManager(ReadedBooks.this));
 
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), getString(R.string.data_load_err) + userId, Toast.LENGTH_SHORT).show();
-                                                }
                                             } else {
-                                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err) + userId, Toast.LENGTH_SHORT).show();
                                             }
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
                                         }
-                                    });
-                                }
+                                    }
+                                });
+                            }
                         } else noUserBooks.setText(getString(R.string.no_user_books));
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
