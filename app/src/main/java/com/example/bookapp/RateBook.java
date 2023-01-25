@@ -78,7 +78,6 @@ public class RateBook extends Drawer_base {
                             if (checkIfFirstRate != 0) {
                                 //Zmiana oceny
 
-                                DecimalFormat decfor = new DecimalFormat("0.00");
                                 DocumentReference book = db.collection("books").document(bookId);
 
                                 book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -91,7 +90,7 @@ public class RateBook extends Drawer_base {
                                                 rates = (document.getLong("rates").intValue());
                                                 bookRate = document.getLong("rate");
 
-                                                bookRate = Math.round((((bookRate - oldUserRate) + userRate) / rates) * 100) / 100;
+                                                bookRate = Math.round(((bookRate - oldUserRate) + userRate) / rates);
 
                                                 db.collection("books").document(bookId)
                                                         .update(
@@ -99,7 +98,7 @@ public class RateBook extends Drawer_base {
                                                                 "rates", rates
                                                         );
 
-                                                openYourBooks();
+                                                openReadedBooks();
 
                                             } else {
                                                 Toast.makeText(getApplicationContext(), getString(R.string.data_load_err) + userId, Toast.LENGTH_SHORT).show();
@@ -125,7 +124,7 @@ public class RateBook extends Drawer_base {
                                                 rates = (document.getLong("rates").intValue()) + 1;
                                                 bookRate = document.getLong("rate");
 
-                                                bookRate = Math.round(((bookRate + userRate) / rates * 100)) / 100;
+                                                bookRate = Math.round((bookRate + userRate) / rates);
 
                                                 db.collection("books").document(bookId)
                                                         .update(
@@ -164,6 +163,11 @@ public class RateBook extends Drawer_base {
 
     public void openYourBooks() {
         Intent intent = new Intent(getApplicationContext(), YourBooks.class);
+        startActivity(intent);
+    }
+
+    public void openReadedBooks() {
+        Intent intent = new Intent(getApplicationContext(), ReadedBooks.class);
         startActivity(intent);
     }
 }

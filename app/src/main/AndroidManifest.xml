@@ -21,6 +21,18 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ChangeUsername"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangeEmail"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChangePassword"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".FindBook"
             android:exported="false"
             android:screenOrientation="portrait" />

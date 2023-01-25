@@ -68,4 +68,24 @@
     <string name="readed_row">Przeczytano:</string>
     <string name="amount">razy</string>
     <string name="user_rate">Twoja ocena</string>
+    <string name="readed_book_alert">Czy chcesz ponownie przeczytać lub ocenić tę książkę?</string>
+    <string name="read_again">Czytaj</string>
+    <string name="rate_again">Zmień ocenę</string>
+    <string name="reading_again">Czytasz tę książkę po raz kolejny</string>
+    <string name="already_reading">Właśnie czytasz tę książkę</string>
+    <string name="pet">Zwierzątko</string>
+    <string name="user_settings">Ustawienia użytkownika</string>
+    <string name="change_username">Zmiań nazwę użytkownika</string>
+    <string name="change_email">Zmień email</string>
+    <string name="change_username_description">Proszę wpisz nową nazwę użytkownika oraz hasło</string>
+    <string name="change">Zmień</string>
+    <string name="username_changed">Pomyślnie zmieniono nazwę użytkownika</string>
+    <string name="change_email_description">Proszę wpisz nowy adres email oraz hasło</string>
+    <string name="email_changed">Pomyślnie zmieniono adres email</string>
+    <string name="wrong_password">Błędne hasło!</string>
+    <string name="new_password">Nowe hasło</string>
+    <string name="old_password">Stare hasło</string>
+    <string name="change_password_description">Proszę wpisz nowe hasło i stare hasło</string>
+    <string name="password_changed">Pomyślnie zmieniono hasło</string>
+    <string name="change_password">Zmień hasło</string>
 </resources>

@@ -67,5 +67,25 @@
     <string name="readed_row">Readed:</string>
     <string name="amount">times</string>
     <string name="user_rate">Your rate</string>
+    <string name="readed_book_alert">Do you want to read or rate that book again?</string>
+    <string name="read_again">Read</string>
+    <string name="rate_again">Change rate</string>
+    <string name="reading_again">You are reading this book one more time</string>
+    <string name="already_reading">You are just now reading this book</string>
+    <string name="pet">Pet</string>
+    <string name="user_settings">User settings</string>
+    <string name="change_username">Change username</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="change_username_description">Please enter your new username and password</string>
+    <string name="change">Change</string>
+    <string name="username_changed">Username successfully changed</string>
+    <string name="change_email_description">Please enter your new email and password</string>
+    <string name="email_changed">Email successfully changed</string>
+    <string name="wrong_password">Wrong password!</string>
+    <string name="new_password">New password</string>
+    <string name="old_password">Old password</string>
+    <string name="change_password_description">Please enter your new password and old password</string>
+    <string name="password_changed">Password successfully changed</string>
 
 </resources>

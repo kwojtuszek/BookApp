@@ -64,6 +64,27 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
                 startActivity(new Intent(this, ReadedBooks.class));
                 overridePendingTransition(0,0);
                 break;
+
+            case R.id.add_book:
+                startActivity(new Intent(this, AddBook.class));
+                overridePendingTransition(0,0);
+                break;
+
+            case R.id.changeUsername:
+                startActivity(new Intent(this, ChangeUsername.class));
+                overridePendingTransition(0,0);
+                break;
+
+            case R.id.changeEmail:
+                startActivity(new Intent(this, ChangeEmail.class));
+                overridePendingTransition(0,0);
+                break;
+
+            case R.id.changePassword:
+                startActivity(new Intent(this, ChangePassword.class));
+                overridePendingTransition(0,0);
+                break;
+
             case R.id.logout:
                 SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -77,10 +98,7 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
                 finish();
                 FirebaseAuth.getInstance().signOut();
                 break;
-            case R.id.add_book:
-                startActivity(new Intent(this, AddBook.class));
-                overridePendingTransition(0,0);
-                break;
+
         }
 
         return false;
