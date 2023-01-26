@@ -44,7 +44,7 @@
     <string name="cancel">Anuluj</string>
     <string name="page_updated">Strona zaktualizowana</string>
     <string name="page_updated_err">Błąd podczas aktualizacji strony!</string>
-    <string name="no_user_books">Nie masz żadnej przypisanej książki!</string>
+    <string name="no_user_books">Nie czytasz żadnej książki!</string>
     <string name="assign">Przypisz Książkę</string>
     <string name="book_assigned">Książka przypisana</string>
     <string name="book_assigned_err">Błąd podczas przypisywania książki!</string>
@@ -88,4 +88,10 @@
     <string name="change_password_description">Proszę wpisz nowe hasło i stare hasło</string>
     <string name="password_changed">Pomyślnie zmieniono hasło</string>
     <string name="change_password">Zmień hasło</string>
+    <string name="no_readed_books">Nie przeczytałeś jeszcze żadnej książki!</string>
+    <string name="all_books_reading">Czytasz wszystkie książki z naszej bazy!</string>
+    <string name="actual_page_0">Aktualna strona nie może wynosić 0!</string>
+    <string name="rate_noun">Ocena</string>
+    <string name="no_rate">Brak ocen!</string>
+    <string name="assign_book_alert">Chcesz przeczytać tę książkę?</string>
 </resources>

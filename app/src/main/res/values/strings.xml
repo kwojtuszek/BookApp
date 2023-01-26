@@ -43,9 +43,9 @@
     <string name="cancel">Cancel</string>
     <string name="page_updated">Page updated</string>
     <string name="page_updated_err">Error while updating page!</string>
-    <string name="no_user_books">No books assigned!</string>
+    <string name="no_user_books">You don\'t read any books!</string>
     <string name="assign">Assign Book</string>
-    <string name="book_assigned">Book assigned</string>
+    <string name="book_assigned">The first time you read this book!</string>
     <string name="book_assigned_err">Book assigned failed!</string>
     <string name="email_exists">This email is already taken</string>
     <string name="pass_lenght">The password must be at least 6 characters long</string>
@@ -87,5 +87,11 @@
     <string name="old_password">Old password</string>
     <string name="change_password_description">Please enter your new password and old password</string>
     <string name="password_changed">Password successfully changed</string>
+    <string name="no_readed_books">You haven\'t read any books yet!</string>
+    <string name="all_books_reading">You are reading all the books from our base!</string>
+    <string name="actual_page_0">The current page cannot be 0!</string>
+    <string name="rate_noun">Rate</string>
+    <string name="no_rate">No ratings!</string>
+    <string name="assign_book_alert">Would you like to read this book?</string>
 
 </resources>

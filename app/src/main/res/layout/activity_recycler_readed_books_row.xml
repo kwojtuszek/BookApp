@@ -54,18 +54,6 @@
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/actual_page"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:gravity="center"
-                android:text="TextView"
-                android:textColor="@color/white"
-                android:textSize="20dp" />
-
-            <TextView
                 android:id="@+id/user_rate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

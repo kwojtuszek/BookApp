@@ -31,20 +31,18 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
 
     String titles[];
     String reads[];
-    String actualPage[];
     String author[];
     String ids[];
     String userRate[];
     Context context;
 
-    public RecyclerReadedBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5, String[] data6) {
+    public RecyclerReadedBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
         context = ctx;
         titles = data1;
         reads = data2;
         ids = data3;
-        actualPage = data4;
-        author = data5;
-        userRate = data6;
+        author = data4;
+        userRate = data5;
     }
 
     @NonNull
@@ -59,7 +57,6 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
     public void onBindViewHolder(@NonNull RecyclerReadedBooksAdapter.viewHolder holder, int position) {
         holder.title.setText(titles[position]);
         holder.reads.setText(context.getString(R.string.readed_row) + " " + reads[position] + " " + context.getString(R.string.amount));
-        holder.actualPage.setText(actualPage[position]);
         holder.author.setText(author[position]);
         holder.id.setText(ids[position]);
         holder.ratingBar.setRating(Float.parseFloat(userRate[position]));
@@ -137,7 +134,7 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
 
     public static class viewHolder extends RecyclerView.ViewHolder {
 
-        TextView title, reads, id, actualPage, author;
+        TextView title, reads, id, author;
         ConstraintLayout readedBooksLayout;
         RatingBar ratingBar;
 
@@ -145,8 +142,6 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
             super(itemView);
             title = itemView.findViewById(R.id.title);
             reads = itemView.findViewById(R.id.reads);
-            actualPage = itemView.findViewById(R.id.actual_page);
-            actualPage.setVisibility(TextView.INVISIBLE);
             author = itemView.findViewById(R.id.author);
             id = itemView.findViewById(R.id.ids);
             id.setVisibility(TextView.INVISIBLE);

@@ -2,46 +2,81 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/findBooksLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:background="@color/trans"
-    android:id="@+id/findBookLayout">
+    android:background="@color/trans">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:cardBackgroundColor="@color/trans"
-        android:padding="20dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#AAAA">
+            android:background="@color/semi_trans">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginTop="5dp"
+                android:layout_alignParentStart="true"
                 android:layout_marginLeft="8dp"
+                android:layout_marginTop="5dp"
                 android:padding="1dp"
                 android:text="TextView"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
-
             <TextView
                 android:id="@+id/author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginLeft="8dp"
                 android:layout_alignParentLeft="true"
+                android:layout_marginLeft="8dp"
+                android:layout_below="@id/title"
                 android:text="TextView"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pages"
+                android:layout_marginRight="8dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="@string/rate_noun"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
+
+            <RatingBar
+                android:id="@+id/bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rate"
+                android:numStars="5"
+                android:isIndicator="true"
+                android:layout_centerInParent="true"
+                android:clickable="false"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                android:theme="@style/RatingBar"
+                />
 
             <TextView
                 android:id="@+id/pages"
@@ -49,21 +84,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
                 android:layout_alignParentRight="true"
-                android:gravity="center"
                 android:layout_marginRight="8dp"
-                android:textColor="@color/white"
+                android:gravity="center"
                 android:text="TextView"
+                android:textColor="@color/white"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/eans"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/author"
-                android:textColor="@color/white"
-                android:layout_marginLeft="8dp"
-                android:text="TextView"
-                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/ids"

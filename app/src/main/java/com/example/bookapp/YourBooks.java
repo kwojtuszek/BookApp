@@ -94,7 +94,7 @@ public class YourBooks extends Drawer_base {
                                                 if (document.exists()) {
 
                                                     titles[finalI] = document.getString("name");
-                                                    pages[finalI] = document.getString("pages");
+                                                    pages[finalI] = document.getLong("pages").toString();
                                                     author[finalI] = document.getString("author");
 
                                                     RecyclerReadingBooksAdapter adapter = new RecyclerReadingBooksAdapter(YourBooks.this, titles, pages, ids, actualPage, author);

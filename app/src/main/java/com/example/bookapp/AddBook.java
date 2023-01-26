@@ -89,7 +89,7 @@ public class AddBook extends Drawer_base {
                                                 Map<String, Object> book = new HashMap<>();
                                                 book.put("name", name);
                                                 book.put("author", author);
-                                                book.put("pages", pages);
+                                                book.put("pages", Integer.parseInt(pages));
                                                 book.put("publisher", publisher);
                                                 book.put("year", year);
                                                 book.put("rate", 0);

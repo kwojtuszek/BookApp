@@ -73,8 +73,8 @@ public class ReadedBooks extends Drawer_base {
                         }
 
                         String[] titles = new String[check.size()], reads = new String[check.size()],
-                                ids = new String[check.size()], actualPage = new String[check.size()],
-                                author = new String[check.size()], userRates = new String[check.size()];
+                                ids = new String[check.size()], author = new String[check.size()],
+                                userRates = new String[check.size()];
 
                         if (check.size() != 0) {
 
@@ -82,7 +82,6 @@ public class ReadedBooks extends Drawer_base {
 
                                 booksData = (Map<String, Object>) userBooks.get(check.get(i));
 
-                                actualPage[i] = String.valueOf(booksData.get("page"));
                                 reads[i] = String.valueOf(booksData.get("reads"));
                                 userRates[i] = String.valueOf(booksData.get("rate"));
                                 ids[i] = String.valueOf(check.get(i));
@@ -100,7 +99,7 @@ public class ReadedBooks extends Drawer_base {
                                                 titles[finalI] = document.getString("name");
                                                 author[finalI] = document.getString("author");
 
-                                                RecyclerReadedBooksAdapter adapter = new RecyclerReadedBooksAdapter(ReadedBooks.this, titles, reads, ids, actualPage, author, userRates);
+                                                RecyclerReadedBooksAdapter adapter = new RecyclerReadedBooksAdapter(ReadedBooks.this, titles, reads, ids, author, userRates);
                                                 recyclerView.setAdapter(adapter);
                                                 recyclerView.setLayoutManager(new LinearLayoutManager(ReadedBooks.this));
 
@@ -113,7 +112,7 @@ public class ReadedBooks extends Drawer_base {
                                     }
                                 });
                             }
-                        } else noUserBooks.setText(getString(R.string.no_user_books));
+                        } else noUserBooks.setText(getString(R.string.no_readed_books));
                     } else {
                         Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
                     }

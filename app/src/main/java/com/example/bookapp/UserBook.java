@@ -44,8 +44,8 @@ public class UserBook extends Drawer_base {
         allocateActivityTitle("");
 
         tvTitle = findViewById(R.id.book_title);
-        tvPagePages= findViewById(R.id.page_pages);
-        tvAuthor= findViewById(R.id.author);
+        tvPagePages = findViewById(R.id.page_pages);
+        tvAuthor = findViewById(R.id.author);
         progress_bar = findViewById(R.id.progress_bar);
         readedbtn = findViewById(R.id.readedbtn);
 
@@ -90,7 +90,7 @@ public class UserBook extends Drawer_base {
         tvAuthor.setText(author);
         tvPagePages.setText(actualPage + "/" + pages);
 
-        progress = (Integer.parseInt(actualPage)*100)/Integer.parseInt(pages);
+        progress = (Integer.parseInt(actualPage) * 100) / Integer.parseInt(pages);
 
         progress_bar.setProgress(progress);
 
@@ -111,35 +111,32 @@ public class UserBook extends Drawer_base {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                if (lastPageInput.getText().toString().isEmpty() || Integer.parseInt(lastPageInput.getText().toString()) == 0) {
-                    dialogInterface.cancel();
+                if (lastPageInput.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
                 } else {
-                if (Integer.parseInt(lastPageInput.getText().toString()) < Integer.parseInt(pages)) {
+                    if (Integer.parseInt(lastPageInput.getText().toString()) == 0) {
+                        Toast.makeText(getApplicationContext(), getString(R.string.actual_page_0), Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (Integer.parseInt(lastPageInput.getText().toString()) < Integer.parseInt(pages)) {
 
-                    SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                    String userId = preferences.getString("id", "");
+                            SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+                            String userId = preferences.getString("id", "");
 
-                    actualPage = lastPageInput.getText().toString();
+                            actualPage = lastPageInput.getText().toString();
 
-                    db.collection("users").document(userId)
-                            .update(
-                                    "book." + id + ".page", Integer.parseInt(actualPage)
-                            );
+                            db.collection("users").document(userId)
+                                    .update(
+                                            "book." + id + ".page", Integer.parseInt(actualPage)
+                                    );
 
-                    setData();
-                } else
-                    Toast.makeText(getApplicationContext(), getString(R.string.actual_page_err), Toast.LENGTH_SHORT).show();
-            }
+                            setData();
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.actual_page_err), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         });
-
-//        pageChangeDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                dialogInterface.cancel();
-//            }
-//        });
 
         pageChangeDialog.show();
     }
@@ -157,6 +154,10 @@ public class UserBook extends Drawer_base {
         editor.putInt("readed", readed);
         editor.putInt("level", actualLevel);
         editor.apply();
+
+        progress = (1 * 100) / Integer.parseInt(pages);
+
+        progress_bar.setProgress(progress);
 
         DocumentReference user = db.collection("users").document(userId);
 
@@ -224,7 +225,6 @@ public class UserBook extends Drawer_base {
 
         return actualLevel;
     }
-
 
 
     public void openYourBooks() {
