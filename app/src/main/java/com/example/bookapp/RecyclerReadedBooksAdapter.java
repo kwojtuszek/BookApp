@@ -36,6 +36,7 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
     String userRate[];
     Context context;
 
+
     public RecyclerReadedBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
         context = ctx;
         titles = data1;

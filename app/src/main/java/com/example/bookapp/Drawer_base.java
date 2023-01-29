@@ -19,6 +19,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Set;
+
 public class Drawer_base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout drawerLayout;
@@ -68,6 +70,16 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
 
             case R.id.add_book:
                 startActivity(new Intent(this, AddBook.class));
+                overridePendingTransition(0,0);
+                break;
+
+            case R.id.pet:
+                startActivity(new Intent(this, Pet.class));
+                overridePendingTransition(0,0);
+                break;
+
+            case R.id.setNotifyTime:
+                startActivity(new Intent(this, SetNotifyTime.class));
                 overridePendingTransition(0,0);
                 break;
 

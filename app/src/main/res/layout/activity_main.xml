@@ -16,19 +16,58 @@
         android:textColor="@color/white"
         android:textSize="35dp"
         android:textStyle="bold"
-        android:layout_margin="50dp"
+        android:layout_margin="10dp"
+        android:paddingBottom="5dp"
         android:gravity="center"/>
 
-    <com.google.android.material.button.MaterialButton
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/base"
+        android:id="@+id/level"
+        android:text="@string/your_level"
+        android:textColor="@color/white"
         android:layout_below="@+id/main"
-        android:text="HALO BAZA"
-        android:backgroundTint="#AAAA"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_alignParentLeft="true"
+        android:textSize="24dp"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/readed_books"
+        android:text="@string/you_readed"
+        android:layout_below="@+id/level"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/next_level"
+        android:text=""
+        android:textColor="@color/white"
+        android:layout_below="@+id/bar"
+        android:layout_alignParentRight="true"
+        android:textSize="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp" />
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bar"
+        android:layout_below="@+id/readed_books"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="2dp"
+        style="?android:progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/line"
         />
+
 
 
 </RelativeLayout>

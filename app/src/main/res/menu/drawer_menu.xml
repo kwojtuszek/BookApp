@@ -36,6 +36,11 @@
     <item android:title="@string/user_settings">
         <menu>
             <group>
+                <item android:id="@+id/setNotifyTime"
+                    android:icon="@drawable/ic_baseline_notifications_24"
+                    android:title="@string/set_notify_time"
+                    />
+
                 <item android:id="@+id/changeUsername"
                     android:icon="@drawable/ic_baseline_person_24"
                     android:title="@string/change_username"

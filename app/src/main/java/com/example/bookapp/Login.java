@@ -25,38 +25,20 @@ import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
 public class Login extends AppCompatActivity {
 
+    TextView tvUsername, tvPassword, register, forgotpass;
+    MaterialButton login;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        register = findViewById(R.id.register);
+        forgotpass = findViewById(R.id.forgotpass);
 
-        TextView tvUsername = findViewById(R.id.username);
-        TextView tvPassword =  findViewById(R.id.password);
-
-        TextView register = findViewById(R.id.register);
-        TextView forgotpass = findViewById(R.id.forgotpass);
-
-        MaterialButton login = findViewById(R.id.login);
-
-        // Przejście do rejestracji
-        register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openRegister();
-            }
-        });
-
-        forgotpass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openPasswordReset();
-            }
-        });
+        login = findViewById(R.id.login);
 
         // Sprawdzenie czy nie użytkownik nie jest już zalogowany z wykorzystaniem SharedPreferences
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -69,71 +51,100 @@ public class Login extends AppCompatActivity {
             Toast.makeText(Login.this, getString(R.string.please_login), Toast.LENGTH_SHORT).show();
         }
 
-        // Funkcja odpowiadająca za logowanie
-        login.setOnClickListener(new View.OnClickListener() {
-
-
+        // Przejście do rejestracji
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String username, password;
-                username = tvUsername.getText().toString();
-                password = tvPassword.getText().toString();
-
-                // Sprawdzenie czy wszystkie pola są wypełnione
-                if (!username.equals("") && !password.equals("")) {
-
-                    // Pobranie adresu email po nazwie użytkownika z Firestore
-                    db.collection("users")
-                            .whereEqualTo("username", username)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        if (task.getResult().isEmpty()) {
-                                            Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            String email = "";
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                                email = document.getString("email");
-
-                                                // Zapisanie danych użytkownika w SharedPreferences
-                                                SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                                                SharedPreferences.Editor editor = preferences.edit();
-                                                editor.putString("remember", "true");
-                                                editor.putString("username", username);
-                                                editor.putString("email", document.getString("email"));
-                                                editor.putInt("level", (document.getLong("level")).intValue());
-                                                editor.putInt("readed", (document.getLong("readed")).intValue());
-                                                editor.putString("id", document.getId());
-                                                editor.apply();
-                                            }
-
-
-                                            // Logowanie użytkownika z wykorzystaniem Firebase Authentication
-                                            mAuth.signInWithEmailAndPassword(email, password)
-                                                    .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                                            if (task.isSuccessful()) {
-                                                                Toast.makeText(getApplicationContext(), getString(R.string.good_login), Toast.LENGTH_SHORT).show();
-                                                                FirebaseUser user = mAuth.getCurrentUser();
-                                                                openMain();
-                                                            } else {
-                                                                Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
+            public void onClick(View view) {
+                openRegister();
             }
         });
+
+        // Przejście do odzyskania hasła
+        forgotpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPasswordReset();
+            }
+        });
+
+
+        // Funkcja odpowiadająca za logowanie
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                login();
+            }
+        });
+    }
+
+    // Logowanie
+    public void login() {
+
+        mAuth = FirebaseAuth.getInstance();
+
+        tvUsername = findViewById(R.id.username);
+        tvPassword =  findViewById(R.id.password);
+
+        String username, password;
+        username = tvUsername.getText().toString();
+        password = tvPassword.getText().toString();
+
+        // Sprawdzenie czy wszystkie pola są wypełnione
+        if (!username.equals("") && !password.equals("")) {
+
+            // Pobranie adresu email po nazwie użytkownika z Firestore
+            db.collection("users")
+                    .whereEqualTo("username", username)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (task.getResult().isEmpty()) {
+                                    Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
+                                } else {
+                                    String email = "";
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                        email = document.getString("email");
+
+                                        // Zapisanie danych użytkownika w SharedPreferences
+                                        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString("remember", "true");
+                                        editor.putString("username", username);
+                                        editor.putString("email", document.getString("email"));
+                                        editor.putString("pet", document.getString("pet"));
+                                        editor.putInt("level", (document.getLong("level")).intValue());
+                                        editor.putInt("readed", (document.getLong("readed")).intValue());
+                                        editor.putInt("notifyTime", (document.getLong("notifyTime")).intValue());
+                                        editor.putString("id", document.getId());
+                                        editor.apply();
+                                    }
+
+
+                                    // Logowanie użytkownika z wykorzystaniem Firebase Authentication
+                                    mAuth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(getApplicationContext(), getString(R.string.good_login), Toast.LENGTH_SHORT).show();
+                                                        FirebaseUser user = mAuth.getCurrentUser();
+                                                        openMain();
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), getString(R.string.bad_login), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                }
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
     // Otwarcie aktywności rejestracjo

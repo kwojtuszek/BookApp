@@ -93,5 +93,26 @@
     <string name="rate_noun">Rate</string>
     <string name="no_rate">No ratings!</string>
     <string name="assign_book_alert">Would you like to read this book?</string>
+    <string name="your_level">Your level:</string>
+    <string name="you_readed">You have already read:</string>
+    <string name="books">books</string>
+    <string name="level_req_1">books to next level</string>
+    <string name="max_level">Maximum level</string>
+    <string name="set_notify_time">Time of notification</string>
+    <string name="reminder">Reminder</string>
+    <string name="reminder_description">Channel for sending reminders</string>
+    <string name="set">Set</string>
+    <string name="notify_time_info">The notification will come at</string>
+    <string name="lion_description">Daro the Lion as King would love to reign in your library</string>
+    <string name="dog_description">Dog Simon is a faithful companion who will keep you company while reading</string>
+    <string name="cat_description">Maciek the Cat is a sweet kitty who likes to have someone scratch his back while reading</string>
+    <string name="piggy_description">Piggy Patrick prefers only a good book preferably with you than his delicious snacks</string>
+    <string name="shark_description">Shark Alexander is a gentle predator, the only thing he devours is a few dozen pages before bedtime</string>
+    <string name="cow_description">Laura the Cow, despite her chronic mooing, can focus on the plot of any book</string>
+    <string name="sloth_description">Konrad the Sloth\'s favorite thing surprisingly is not sleeping, but lazing around with a book</string>
+    <string name="fox_description">Radek the Fox is a little prankster, so you\'d better watch your books because he might hide them</string>
+    <string name="turtle_description">Turtle Iga may be slow moving, but no one reads books faster than she does</string>
+    <string name="crocodile_description">Crocodile Claudius, despite his crocodile duties, will always find time to read with you</string>
+    <string name="level_req">Required level</string>
 
 </resources>

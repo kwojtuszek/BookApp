@@ -1,9 +1,16 @@
 package com.example.bookapp;
 
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,19 +34,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class MainActivity extends Drawer_base {
-    String[] titles;
-    String[] pages = null;
-    String[] ids = null;
-    String[] actualPage = null;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    TextView tvWelcome, tvYourLevel, tvYourReadedBooks, tvNextLevel;
+
     ActivityMainBinding activityMainBinding;
+    ProgressBar progress_bar;
+    int experience, userLevel, userReads;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,235 +56,113 @@ public class MainActivity extends Drawer_base {
         setContentView(activityMainBinding.getRoot());
         allocateActivityTitle("");
 
-        TextView tvwelcome = findViewById(R.id.main);
+        notificationChannel();
+        calendar();
+        startView();
+    }
 
-        MaterialButton base = findViewById(R.id.base);
+    public void startView() {
 
+        tvWelcome = findViewById(R.id.main);
+        tvYourLevel = findViewById(R.id.level);
+        tvYourReadedBooks = findViewById(R.id.readed_books);
+        tvNextLevel = findViewById(R.id.next_level);
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        progress_bar = findViewById(R.id.bar);
+
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-        String userId = preferences.getString("id", "");
-        tvwelcome.append(" " + preferences.getString("username", ""));
+        userLevel = preferences.getInt("level", 0);
+        userReads = preferences.getInt("readed", 0);
 
-//        base.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-//                String userId = preferences.getString("id", "");
-//
-//                DocumentReference user = db.collection("users").document(userId);
-//
-//                CollectionReference collection = db.collection("books");
-//                Query query = collection;
-//                AggregateQuery countQuery = query.count();
-//                countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        AggregateQuerySnapshot snapshot = task.getResult();
-//                        long size = snapshot.getCount();
-//
-//                        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                if (task.isSuccessful()) {
-//                                    DocumentSnapshot document = task.getResult();
-//                                    if (document.exists()) {
-//
-//                                        Map<String, Object> userBooks = new HashMap<>();
-//                                        userBooks = (Map<String, Object>) document.get("book");
-//                                        Object[] booksIds = userBooks.keySet().toArray();
-//
-//                                        Map<String, Object> booksData = new HashMap<>();
-//                                        ArrayList check = new ArrayList<>();
-//
-//                                        for (int j = 0; j < booksIds.length; j++) {
-//                                            booksData = (Map<String, Object>) userBooks.get(booksIds[j]);
-//
-//                                            if (Integer.parseInt(String.valueOf(booksData.get("page"))) != 0) {
-//                                                check.add(booksIds[j]);
-//                                            }
-//                                        }
-//
-//                                        String[] titles = new String[(int) size], pages = new String[(int) size],
-//                                                ids = new String[(int) size], rates = new String[(int) size],
-//                                                authors = new String[(int) size];
-//
-//                                        db.collection("books")
-//                                                .get()
-//                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                                    @Override
-//                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                        if (task.isSuccessful()) {
-//
-//                                                            int indicator = 0;
-//
-//                                                            for (QueryDocumentSnapshot document : task.getResult()) {
-//
-//                                                                boolean isReading = false;
-//
-//                                                                for (int i = 0; i < check.size(); i++) {
-//                                                                    if (String.valueOf(check.get(i)).equals(document.getId())) {
-//                                                                        isReading = true;
-//                                                                    }
-//                                                                }
-//
-//                                                                if (!isReading) {
-//
-//                                                                    titles[indicator] = document.getString("name");
-//                                                                    authors[indicator] = document.getString("author");
-//                                                                    ids[indicator] = document.getId();
-//                                                                    rates[indicator] = document.getLong("rate").toString();
-//                                                                    pages[indicator] = document.getLong("pages").toString();
-//                                                                }
-//                                                            }
-//                                                        } else {
-//                                                            Toast.makeText(getApplicationContext(), "Nie dziala 2", Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    }
-//                                                });
-//
-//                                        RecyclerReadingBooksAdapter adapter = new RecyclerReadingBooksAdapter(FindBook.this, titles, pages, ids, rates, authors);
-//                                        recyclerView.setAdapter(adapter);
-//                                        recyclerView.setLayoutManager(new LinearLayoutManager(FindBook.this));
-//
-//
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//
-//                    } else {
-//                    }
-//                });
+        tvWelcome.append(" " + preferences.getString("username", ""));
+        tvYourLevel.append(" " + userLevel);
+        tvYourReadedBooks.append(" " + userReads + " " + getString(R.string.books));
 
+        progress_bar.setProgress(countExperienceBar(userLevel, userReads));
 
-//                    SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-//                    String userId = preferences.getString("id", "");
-//
-//
-//                    DocumentReference user = db.collection("users").document(userId);
-//
-//                    user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                DocumentSnapshot document = task.getResult();
-//                                if (document.exists()) {
-//
-//                                    Map<String, Object> userBooks = new HashMap<>();
-//                                    userBooks = (Map<String, Object>) document.get("book");
-//                                    Object[] booksIds = userBooks.keySet().toArray();
-//
-//                                    Map<String, Object> booksData = new HashMap<>();
-//
-//                                    titles = new String[booksIds.length];
-//                                    pages = new String[booksIds.length];
-//                                    ids = new String[booksIds.length];
-//                                    actualPage = new String[booksIds.length];
-//
-//                                    int i;
-//
-//                                    for (i = 0; i <= 1; i++) {
-//
-//                                        booksData = (Map<String, Object>) userBooks.get(booksIds[i]);
-//                                        actualPage[i] = String.valueOf(booksData.get("page"));
-//                                        ids[i] = String.valueOf(booksIds[i]);
-//
-//                                        DocumentReference book = db.collection("books").document(String.valueOf(booksIds[i]));
-//
-//                                        int finalI = i;
-//                                        book.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    DocumentSnapshot document = task.getResult();
-//                                                    if (document.exists()) {
-//
-//                                                        titles[finalI] = document.getString("name");
-//
-////                                                        Toast.makeText(getApplicationContext(), "To ma byc 1 " + titles[finalI], Toast.LENGTH_SHORT).show();
-//
-//                                                        pages[finalI] = "dupa";
-//
-//
-//
-//                                                    } else {
-//                                                        Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                } else {
-//                                                    Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }
-//                                        });
-//                                    }
-//                                    if (i >= booksIds.length) {
-//                                        Toast.makeText(getApplicationContext(), "Dupa " + titles[1], Toast.LENGTH_SHORT).show();
-//                                    }
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
-//
-//
-//                    Toast.makeText(getApplicationContext(), "Giga test " + titles[1], Toast.LENGTH_SHORT).show();
+    }
 
+    public int countExperienceBar(int userLevel, int userReads) {
 
-//                    boolean check = false;
-//
-//                    DocumentReference user = db.collection("users").document(userId);
-//
-//                    user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                DocumentSnapshot document = task.getResult();
-//                                if (document.exists()) {
-//                                    Map<String, Object> userBooks = new HashMap<>();
-//                                    Map<String, Object> booksData = new HashMap<>();
-//                                    userBooks = (Map<String, Object>) document.get("book");
-//                                    Object[] ids = userBooks.keySet().toArray();
-//                                    booksData = (Map<String, Object>) userBooks.get(ids[0]);
-//                                    String pages = String.valueOf(booksData.get("page"));
-//                                    Toast.makeText(getApplicationContext(), "Dziala: " + pages, Toast.LENGTH_SHORT).show();
-//                                } else {
-//                                    Toast.makeText(getApplicationContext(), "Nie działa" + userId, Toast.LENGTH_SHORT).show();
-//                                }
-//                            } else {
-//                                Toast.makeText(getApplicationContext(), "Nie działa333", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    });
+        switch (userLevel) {
+            case 1:
+                experience = userReads * 100 / 10;
+                tvNextLevel.setText((10 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 2:
+                experience = userReads * 100 / 20;
+                tvNextLevel.setText((20 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 3:
+                experience = userReads * 100 / 30;
+                tvNextLevel.setText((30 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 4:
+                experience = userReads * 100 / 40;
+                tvNextLevel.setText((40 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 5:
+                experience = userReads * 100 / 50;
+                tvNextLevel.setText((50 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 6:
+                experience = userReads * 100 / 60;
+                tvNextLevel.setText((60 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 7:
+                experience = userReads * 100 / 70;
+                tvNextLevel.setText((70 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 8:
+                experience = userReads * 100 / 80;
+                tvNextLevel.setText((80 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 9:
+                experience = userReads * 100 / 90;
+                tvNextLevel.setText((90 - userReads) + " " + getString(R.string.level_req_1));
+                break;
+            case 10:
+                tvNextLevel.setText(getString(R.string.max_level));
+        }
+        return experience;
+    }
 
-//                    db.collection("test")
-//                            .get()
-//                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                    if (task.isSuccessful()) {
-//                                        if (task.getResult().isEmpty()) {
-//                                            Toast.makeText(getApplicationContext(), "Walidacja gites", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                        for (QueryDocumentSnapshot document : task.getResult()) {
-//                                            Toast.makeText(getApplicationContext(), "Dziala: " + document.getString("mes"), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), "Nie działa", Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            });
+    public void notificationChannel() {
 
-//            }
-//        });
-//    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("Notification", getString(R.string.reminder), NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription(getString(R.string.reminder_description));
 
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void calendar() {
+
+        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        int notifyTime = preferences.getInt("notifyTime", 8);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.MINUTE, 20);
+
+        if (Calendar.getInstance().after(calendar)) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        Intent intent = new Intent(MainActivity.this, Broadcast.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 }

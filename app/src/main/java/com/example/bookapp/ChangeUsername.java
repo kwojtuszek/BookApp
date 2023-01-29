@@ -21,7 +21,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 public class ChangeUsername extends Drawer_base {
 
     ActivityChangeUsernameBinding activityChangeUsernameBinding;
+    TextView tvUsername, tvPassword;
+    MaterialButton changebtn;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,75 +33,80 @@ public class ChangeUsername extends Drawer_base {
         setContentView(activityChangeUsernameBinding.getRoot());
         allocateActivityTitle("");
 
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        MaterialButton changebtn = findViewById(R.id.changebtn);
-
-        TextView tvUsername = findViewById(R.id.username);
-        TextView tvPassword = findViewById(R.id.password);
-
-        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-        String userId = preferences.getString("id", "");
-        String userEmail = preferences.getString("email", "");
+        changebtn = findViewById(R.id.changebtn);
 
         changebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String username = tvUsername.getText().toString();
-                String password = tvPassword.getText().toString();
-
-                if (!username.isEmpty() && !password.isEmpty()) {
-
-                    db.collection("users")
-                            .whereEqualTo("username", username)
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-
-                                        if (task.getResult().isEmpty()) {
-
-
-                                            mAuth.signInWithEmailAndPassword(userEmail, password)
-                                                    .addOnCompleteListener(ChangeUsername.this, new OnCompleteListener<AuthResult>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                                            if (task.isSuccessful()) {
-
-                                                                db.collection("users").document(userId)
-                                                                        .update(
-                                                                                "username", username
-                                                                        );
-
-                                                                SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
-                                                                SharedPreferences.Editor editor = preferences.edit();
-                                                                editor.putString("username", username);
-                                                                editor.apply();
-
-
-                                                                Toast.makeText(ChangeUsername.this, getString(R.string.username_changed), Toast.LENGTH_SHORT).show();
-                                                                openMain();
-
-                                                            } else {
-                                                                Toast.makeText(getApplicationContext(), getString(R.string.wrong_password), Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
-                                                    });
-                                        } else
-                                            Toast.makeText(getApplicationContext(), getString(R.string.user_exists), Toast.LENGTH_SHORT).show();
-                                    } else
-                                        Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                } else
-                    Toast.makeText(ChangeUsername.this, getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
+                changeUsername();
 
             }
         });
+    }
+
+    public void changeUsername() {
+
+        mAuth = FirebaseAuth.getInstance();
+
+        tvUsername = findViewById(R.id.username);
+        tvPassword = findViewById(R.id.password);
+
+        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
+        String userEmail = preferences.getString("email", "");
+
+        String username = tvUsername.getText().toString();
+        String password = tvPassword.getText().toString();
+
+        if (!username.isEmpty() && !password.isEmpty()) {
+
+            db.collection("users")
+                    .whereEqualTo("username", username)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+
+                                if (task.getResult().isEmpty()) {
+
+
+                                    mAuth.signInWithEmailAndPassword(userEmail, password)
+                                            .addOnCompleteListener(ChangeUsername.this, new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+
+                                                        db.collection("users").document(userId)
+                                                                .update(
+                                                                        "username", username
+                                                                );
+
+                                                        SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+                                                        SharedPreferences.Editor editor = preferences.edit();
+                                                        editor.putString("username", username);
+                                                        editor.apply();
+
+
+                                                        Toast.makeText(ChangeUsername.this, getString(R.string.username_changed), Toast.LENGTH_SHORT).show();
+                                                        openMain();
+
+                                                    } else {
+                                                        Toast.makeText(getApplicationContext(), getString(R.string.wrong_password), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                } else
+                                    Toast.makeText(getApplicationContext(), getString(R.string.user_exists), Toast.LENGTH_SHORT).show();
+                            } else
+                                Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } else {
+            Toast.makeText(ChangeUsername.this, getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void openMain() {

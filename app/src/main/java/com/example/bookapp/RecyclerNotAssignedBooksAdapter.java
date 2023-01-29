@@ -23,26 +23,27 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<RecyclerNotAssignedBooksAdapter.viewHolder> {
 
-
-    String titles[];
-    String authors[];
-    String pages[];
-    String rate[];
-    String ids[];
     Context context;
 
-    public RecyclerNotAssignedBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String data5[]) {
+    ArrayList<String> arrayNames = new ArrayList<String>();
+    ArrayList<String> arrayPages = new ArrayList<String>();
+    ArrayList<String> arrayIds = new ArrayList<String>();
+    ArrayList<String> arrayRates = new ArrayList<String>();
+    ArrayList<String> arrayAuthors = new ArrayList<String>();
+
+    public RecyclerNotAssignedBooksAdapter(Context ctx, ArrayList<String> data1, ArrayList<String> data2, ArrayList<String> data3, ArrayList<String> data4, ArrayList<String> data5) {
         context = ctx;
-        titles = data1;
-        ids = data2;
-        pages = data3;
-        rate = data4;
-        authors = data5;
+        arrayNames = data1;
+        arrayPages = data2;
+        arrayIds = data3;
+        arrayRates = data4;
+        arrayAuthors = data5;
     }
 
     @NonNull
@@ -55,15 +56,15 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-        holder.title.setText(titles[position]);
-        holder.author.setText(authors[position]);
-        holder.pages.setText(context.getString(R.string.pages) + " " + pages[position]);
-        if (!rate[position].equals("0")) {
-            holder.ratingBar.setRating(Float.parseFloat(rate[position]));
+        holder.title.setText(arrayNames.get(position));
+        holder.author.setText(arrayAuthors.get(position));
+        holder.pages.setText(context.getString(R.string.pages) + " " + arrayPages.get(position));
+        if (!arrayRates.get(position).equals("0")) {
+            holder.ratingBar.setRating(Float.parseFloat(arrayRates.get(position)));
         } else {
             holder.rate.setText(context.getString(R.string.no_rate));
         }
-        holder.id.setText(ids[position]);
+        holder.id.setText(arrayIds.get(position));
 
         holder.findBookLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +81,7 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
 
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         DocumentReference user = db.collection("users").document(userId);
-                        DocumentReference book = db.collection("books").document(ids[position]);
+                        DocumentReference book = db.collection("books").document(arrayIds.get(position));
 
                         user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
@@ -89,11 +90,11 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
 
-                                        if (document.get("book." + ids[position] + ".page") != null) {
+                                        if (document.get("book." + arrayIds.get(position) + ".page") != null) {
 
                                             db.collection("users").document(userId)
                                                     .update(
-                                                            "book." + ids[position] + ".page", 1
+                                                            "book." + arrayIds.get(position) + ".page", 1
                                                     );
 
                                             Toast.makeText(context, context.getString(R.string.reading_again), Toast.LENGTH_SHORT).show();
@@ -110,7 +111,7 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
 
                                             // Klucz mapy do znalezienia przypisanych danych
                                             Map<String, Object> preparedBook = new HashMap<>();
-                                            preparedBook.put(ids[position], bookData);
+                                            preparedBook.put(arrayIds.get(position), bookData);
 
                                             // Wskazanie mapy w której przypisana książka i jej dane mają się zapisać
                                             Map<String, Object> assignBook = new HashMap<>();
@@ -142,7 +143,7 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return titles.length;
+        return arrayNames.size();
     }
 
 public class viewHolder extends RecyclerView.ViewHolder {
