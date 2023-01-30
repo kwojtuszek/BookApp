@@ -41,7 +41,6 @@ public class UserBook extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityUserBookBinding = ActivityUserBookBinding.inflate(getLayoutInflater());
         setContentView(activityUserBookBinding.getRoot());
-        allocateActivityTitle("");
 
         tvTitle = findViewById(R.id.book_title);
         tvPagePages = findViewById(R.id.page_pages);
@@ -79,6 +78,8 @@ public class UserBook extends Drawer_base {
             actualPage = getIntent().getStringExtra("actualPage");
             author = getIntent().getStringExtra("author");
 
+            allocateActivityTitle(title);
+
         } else {
             Toast.makeText(this, getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
         }
@@ -98,11 +99,12 @@ public class UserBook extends Drawer_base {
 
     public void pageChange() {
 
-        AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(UserBook.this);
+        AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(UserBook.this, R.style.CustomAlertDialogTheme);
         pageChangeDialog.setTitle(getString(R.string.page_question));
 
         EditText lastPageInput = new EditText(UserBook.this);
         lastPageInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+        lastPageInput.setTextColor(getResources().getColor(R.color.white));
         lastPageInput.setText(actualPage, TextView.BufferType.EDITABLE);
 
         pageChangeDialog.setView(lastPageInput);

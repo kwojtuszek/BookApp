@@ -31,7 +31,7 @@ public class YourBooks extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityYourBooksBinding = ActivityYourBooksBinding.inflate(getLayoutInflater());
         setContentView(activityYourBooksBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.user_books));
 
         startView();
     }

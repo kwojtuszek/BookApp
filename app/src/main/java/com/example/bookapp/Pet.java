@@ -17,7 +17,7 @@ public class Pet extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityPetBinding = activityPetBinding.inflate(getLayoutInflater());
         setContentView(activityPetBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.pet));
 
 
         int [] pets = {R.drawable.lion, R.drawable.doggo, R.drawable.kitty,

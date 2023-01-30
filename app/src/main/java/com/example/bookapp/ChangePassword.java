@@ -32,7 +32,7 @@ public class ChangePassword extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityChangePasswordBinding = activityChangePasswordBinding.inflate(getLayoutInflater());
         setContentView(activityChangePasswordBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.change_password));
 
 
         changebtn = findViewById(R.id.changebtn);

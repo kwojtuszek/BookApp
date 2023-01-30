@@ -13,4 +13,8 @@
     <color name="grey">#C0FFFFFF</color>
     <color name="dark_grey">#FF808080</color>
     <color name="semi_dark_grey">#CC808080</color>
+    <color name="darker_purple">#4E5283</color>
+    <color name="lighter_purple">#7871AA</color> 7871AA
+    <color name="semi_orange">#DC965A</color>
+    <color name="rotten_green">#659157</color>
 </resources>

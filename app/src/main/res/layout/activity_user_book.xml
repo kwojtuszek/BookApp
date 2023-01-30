@@ -61,7 +61,9 @@
         android:id="@+id/readedbtn"
         android:layout_below="@+id/progress_bar"
         android:text="@string/readed"
-        android:backgroundTint="#AAAA"
+        android:backgroundTint="@color/darker_purple"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         />

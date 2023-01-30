@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,17 +45,19 @@ public class MainActivity extends Drawer_base {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     TextView tvWelcome, tvYourLevel, tvYourReadedBooks, tvNextLevel;
+    ImageView imPet;
 
     ActivityMainBinding activityMainBinding;
     ProgressBar progress_bar;
     int experience, userLevel, userReads;
+    String pet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(activityMainBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.main_page));
 
         notificationChannel();
         calendar();
@@ -67,19 +70,32 @@ public class MainActivity extends Drawer_base {
         tvYourLevel = findViewById(R.id.level);
         tvYourReadedBooks = findViewById(R.id.readed_books);
         tvNextLevel = findViewById(R.id.next_level);
-
         progress_bar = findViewById(R.id.bar);
+        imPet = findViewById(R.id.pet_image);
 
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
         userLevel = preferences.getInt("level", 0);
         userReads = preferences.getInt("readed", 0);
+        pet = preferences.getString("pet", "");
+
 
         tvWelcome.append(" " + preferences.getString("username", ""));
         tvYourLevel.append(" " + userLevel);
         tvYourReadedBooks.append(" " + userReads + " " + getString(R.string.books));
 
         progress_bar.setProgress(countExperienceBar(userLevel, userReads));
+
+        imPet.setImageResource(setPetImage(pet));
+
+        imPet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setPetMessage(pet);
+            }
+        });
+
+
 
     }
 
@@ -145,15 +161,15 @@ public class MainActivity extends Drawer_base {
         int notifyTime = preferences.getInt("notifyTime", 8);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 20);
+        calendar.set(Calendar.HOUR_OF_DAY, notifyTime);
+        calendar.set(Calendar.SECOND, 0);
 
         if (Calendar.getInstance().after(calendar)) {
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
         Intent intent = new Intent(MainActivity.this, Broadcast.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
@@ -164,5 +180,103 @@ public class MainActivity extends Drawer_base {
         } else {
             alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
+    }
+
+    public int setPetImage(String pet) {
+
+        int imageSrc = 0;
+
+        switch (pet) {
+
+            case "lion":
+                imageSrc = R.drawable.lion;
+                break;
+
+            case "dog":
+                imageSrc = R.drawable.doggo;
+                break;
+
+            case "cat":
+                imageSrc = R.drawable.kitty;
+                break;
+
+            case "piggy":
+                imageSrc = R.drawable.piggy;
+                break;
+
+            case "shark":
+                imageSrc = R.drawable.shark;
+                break;
+
+            case "cow":
+                imageSrc = R.drawable.cow;
+                break;
+
+            case "sloth":
+                imageSrc = R.drawable.sloth;
+                break;
+
+            case "fox":
+                imageSrc = R.drawable.fox;
+                break;
+
+            case "turtle":
+                imageSrc = R.drawable.turtle;
+                break;
+
+            case "crocodile":
+                imageSrc = R.drawable.crocodile;
+                break;
+        }
+
+        return imageSrc;
+
+    }
+
+    public void setPetMessage(String pet) {
+
+        switch (pet) {
+
+            case "lion":
+                Toast.makeText(getApplicationContext(), getString(R.string.lion_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "dog":
+                Toast.makeText(getApplicationContext(), getString(R.string.dog_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "cat":
+                Toast.makeText(getApplicationContext(), getString(R.string.cat_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "piggy":
+                Toast.makeText(getApplicationContext(), getString(R.string.piggy_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "shark":
+                Toast.makeText(getApplicationContext(), getString(R.string.shark_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "cow":
+                Toast.makeText(getApplicationContext(), getString(R.string.cow_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "sloth":
+                Toast.makeText(getApplicationContext(), getString(R.string.sloth_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "fox":
+                Toast.makeText(getApplicationContext(), getString(R.string.fox_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "turtle":
+                Toast.makeText(getApplicationContext(), getString(R.string.turtle_click), Toast.LENGTH_SHORT).show();
+                break;
+
+            case "crocodile":
+                Toast.makeText(getApplicationContext(), getString(R.string.crocodile_click), Toast.LENGTH_SHORT).show();
+                break;
+        }
+
     }
 }

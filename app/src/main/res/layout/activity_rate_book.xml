@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/backround"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/semi_orange"
     tools:context=".RateBook">
 
     <TextView
@@ -33,8 +34,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/ratebtn"
         android:layout_below="@+id/ratingbar"
+        android:textColor="@color/white"
         android:text="@string/rate"
-        android:backgroundTint="#AAAA"
+        android:backgroundTint="@color/darker_purple"
+        app:cornerRadius="10dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="30dp"
         />

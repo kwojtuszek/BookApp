@@ -3,6 +3,7 @@ package com.example.bookapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -147,6 +148,7 @@ public class AddBook extends Drawer_base {
                                                                                     .set(assignBook, SetOptions.merge());
 
                                                                             Toast.makeText(getApplicationContext(), getString(R.string.book_added), Toast.LENGTH_SHORT).show();
+                                                                            openYourBooks();
 
                                                                         } else {
                                                                             Toast.makeText(getApplicationContext(), getString(R.string.book_added_not_assigned), Toast.LENGTH_SHORT).show();
@@ -170,6 +172,12 @@ public class AddBook extends Drawer_base {
                 Toast.makeText(getApplicationContext(), getString(R.string.pages_validate), Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
+    }
+
+    public void openYourBooks() {
+
+        Intent intent = new Intent(getApplicationContext(), YourBooks.class);
+        startActivity(intent);
     }
 
 }

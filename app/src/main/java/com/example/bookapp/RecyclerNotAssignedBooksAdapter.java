@@ -70,7 +70,7 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context);
+                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
                 pageChangeDialog.setTitle(context.getString(R.string.assign_book_alert));
 
                 pageChangeDialog.setPositiveButton(context.getString(R.string.read_again), new DialogInterface.OnClickListener() {

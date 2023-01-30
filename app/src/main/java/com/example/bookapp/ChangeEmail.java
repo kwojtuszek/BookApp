@@ -34,7 +34,7 @@ public class ChangeEmail extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityChangeEmailBinding = activityChangeEmailBinding.inflate(getLayoutInflater());
         setContentView(activityChangeEmailBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.change_email));
 
         changebtn = findViewById(R.id.changebtn);
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backround"
+    android:background="@color/semi_orange"
     tools:context=".Login">
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/signin"
-        android:background="#30ffffff"
+        android:background="@drawable/edit_text_shape"
         android:hint="@string/username"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/username"
-        android:background="#30ffffff"
+        android:background="@drawable/edit_text_shape"
         android:hint="@string/password"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
@@ -54,8 +54,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/login"
         android:layout_below="@+id/password"
+        android:textColor="@color/white"
         android:text="@string/sign_in"
-        android:backgroundTint="#AAAA"
+        app:cornerRadius="10dp"
+        android:backgroundTint="@color/darker_purple"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
         />
@@ -66,7 +68,7 @@
         android:id="@+id/forgotpass"
         android:layout_below="@+id/login"
         android:text="@string/forogt_password"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:layout_alignLeft="@id/signin"
         android:layout_margin="20dp"
         />
@@ -77,7 +79,7 @@
         android:id="@+id/register"
         android:layout_below="@+id/login"
         android:text="@string/register"
-        android:textColor="@color/white"
+        android:textColor="#FFFFFF"
         android:layout_alignRight="@id/signin"
         android:layout_margin="20dp"
         />

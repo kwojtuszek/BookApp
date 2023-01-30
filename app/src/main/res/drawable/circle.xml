@@ -17,8 +17,8 @@
                 android:thicknessRatio="16"
                 android:useLevel="true">
                 <gradient
-                    android:endColor="@color/white"
-                    android:startColor="#0000FF"
+                    android:endColor="@color/rotten_green"
+                    android:startColor="@color/darker_purple"
                     android:type="sweep" />
             </shape>
         </rotate>

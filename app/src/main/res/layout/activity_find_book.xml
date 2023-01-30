@@ -25,7 +25,7 @@
             android:id="@+id/book_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#30ffffff"
+            android:background="@drawable/edit_text_shape"
             android:drawableLeft="@drawable/ic_baseline_search_24"
             android:drawablePadding="20dp"
             android:hint="@string/book_name"

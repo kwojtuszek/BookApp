@@ -49,7 +49,7 @@ public class FindBook extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityFindBookBinding = ActivityFindBookBinding.inflate(getLayoutInflater());
         setContentView(activityFindBookBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.find_book));
 
         EditText search = findViewById(R.id.book_name);
 

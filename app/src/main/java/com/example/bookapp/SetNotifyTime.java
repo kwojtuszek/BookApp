@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.example.bookapp.databinding.ActivitySetNotifyTimeBinding;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SetNotifyTime extends Drawer_base {
 
@@ -22,7 +23,7 @@ public class SetNotifyTime extends Drawer_base {
         super.onCreate(savedInstanceState);
         activitySetNotifyTimeBinding = activitySetNotifyTimeBinding.inflate(getLayoutInflater());
         setContentView(activitySetNotifyTimeBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.set_notify_time));
 
         setData();
 
@@ -64,10 +65,18 @@ public class SetNotifyTime extends Drawer_base {
             time = 0;
         }
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("notifyTime", time);
         editor.apply();
+
+        db.collection("users").document(userId)
+                .update(
+                        "notifyTime", time
+                );
 
     }
 

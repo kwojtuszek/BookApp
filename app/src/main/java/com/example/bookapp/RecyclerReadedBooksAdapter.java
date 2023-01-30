@@ -66,7 +66,7 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context);
+                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
                 pageChangeDialog.setTitle(context.getString(R.string.readed_book_alert));
 
                 pageChangeDialog.setPositiveButton(context.getString(R.string.rate_again), new DialogInterface.OnClickListener() {

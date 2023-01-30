@@ -33,7 +33,7 @@ public class ReadedBooks extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityReadedBooksBinding = ActivityReadedBooksBinding.inflate(getLayoutInflater());
         setContentView(activityReadedBooksBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.readed));
 
         startView();
     }

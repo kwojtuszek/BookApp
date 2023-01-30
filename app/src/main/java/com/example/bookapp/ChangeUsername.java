@@ -31,7 +31,7 @@ public class ChangeUsername extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityChangeUsernameBinding = activityChangeUsernameBinding.inflate(getLayoutInflater());
         setContentView(activityChangeUsernameBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.change_username));
 
         changebtn = findViewById(R.id.changebtn);
 

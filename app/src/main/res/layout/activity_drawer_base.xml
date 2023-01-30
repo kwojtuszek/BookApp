@@ -22,7 +22,7 @@
         android:id="@+id/nav_view"
         app:headerLayout="@layout/activity_drawer_header"
         app:menu="@menu/drawer_menu"
-        android:background="@color/semi_dark_grey" >
+        android:background="@color/lighter_purple" >
 
 
     </com.google.android.material.navigation.NavigationView>
