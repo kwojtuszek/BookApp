@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/setbtn"
         android:layout_below="@+id/number_picker"
+        android:textColor="@color/white"
         android:text="@string/set"
         android:backgroundTint="@color/darker_purple"
         app:cornerRadius="10dp"

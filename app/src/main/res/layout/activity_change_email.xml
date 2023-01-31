@@ -71,6 +71,7 @@
         android:id="@+id/changebtn"
         android:layout_below="@+id/password"
         android:text="@string/change"
+        android:textColor="@color/white"
         android:backgroundTint="@color/darker_purple"
         app:cornerRadius="10dp"
         android:layout_centerHorizontal="true"
