@@ -47,9 +47,10 @@ public class MainActivity extends Drawer_base {
     TextView tvWelcome, tvYourLevel, tvYourReadedBooks, tvNextLevel;
     ImageView imPet;
 
+    int[] levelThresholds = {10, 20, 30, 40, 50, 60, 70, 80, 90, 91};
     ActivityMainBinding activityMainBinding;
     ProgressBar progress_bar;
-    int experience, userLevel, userReads;
+    int userLevel, userReads;
     String pet;
 
     @Override
@@ -82,9 +83,12 @@ public class MainActivity extends Drawer_base {
 
         tvWelcome.append(" " + preferences.getString("username", ""));
         tvYourLevel.append(" " + userLevel);
-        tvYourReadedBooks.append(" " + userReads + " " + getString(R.string.books));
 
-        progress_bar.setProgress(countExperienceBar(userLevel, userReads));
+        tvYourReadedBooks.setText(getYourReadedBooksText(userReads));
+
+        progress_bar.setProgress(getExperienceByLevel(userReads));
+
+        tvNextLevel.setText(getNextLevelText(userLevel, userReads));
 
         imPet.setImageResource(setPetImage(pet));
 
@@ -96,52 +100,58 @@ public class MainActivity extends Drawer_base {
         });
 
 
-
     }
 
-    public int countExperienceBar(int userLevel, int userReads) {
+    public int getExperienceByLevel(int userReads) {
 
-        switch (userLevel) {
-            case 1:
-                experience = userReads * 100 / 10;
-                tvNextLevel.setText((10 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 2:
-                experience = userReads * 100 / 20;
-                tvNextLevel.setText((20 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 3:
-                experience = userReads * 100 / 30;
-                tvNextLevel.setText((30 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 4:
-                experience = userReads * 100 / 40;
-                tvNextLevel.setText((40 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 5:
-                experience = userReads * 100 / 50;
-                tvNextLevel.setText((50 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 6:
-                experience = userReads * 100 / 60;
-                tvNextLevel.setText((60 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 7:
-                experience = userReads * 100 / 70;
-                tvNextLevel.setText((70 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 8:
-                experience = userReads * 100 / 80;
-                tvNextLevel.setText((80 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 9:
-                experience = userReads * 100 / 90;
-                tvNextLevel.setText((90 - userReads) + " " + getString(R.string.level_req_1));
-                break;
-            case 10:
-                tvNextLevel.setText(getString(R.string.max_level));
+        int levelStartReads;
+        for (int i = 0; i < levelThresholds.length; i++) {
+            if (userReads < levelThresholds[i]) {
+                if (i == 0) {
+                    levelStartReads = 0;
+                } else {
+                    levelStartReads = levelThresholds[i - 1];
+                }
+                return (userReads - levelStartReads) * 100 / 10;
+            }
         }
-        return experience;
+        return 100;
+    }
+
+    private String getNextLevelText(int userLevel, int userReads) {
+
+        if (userLevel == 10) {
+            return getString(R.string.max_level);
+        } else {
+            int nextLevelReads = levelThresholds[userLevel - 1];
+            int readsToNextLevel = nextLevelReads - userReads;
+            if (readsToNextLevel < 5) {
+                if (readsToNextLevel == 1) {
+                    return readsToNextLevel + " " + getString(R.string.level_req_1);
+                } else {
+                    return readsToNextLevel + " " + getString(R.string.level_req_2);
+                }
+            } else {
+                return readsToNextLevel + " " + getString(R.string.level_req_3);
+            }
+        }
+    }
+
+    public String getYourReadedBooksText(int userReads) {
+
+        String yourReadedBooks;
+        int lastDigit = userReads % 10;
+
+        if (userReads == 0) {
+            yourReadedBooks = getString(R.string.no_readed_books);
+        } else if (userReads == 1) {
+            yourReadedBooks = (getString(R.string.you_readed) + " " + userReads + " " + getString(R.string.books_one));
+        } else if (lastDigit < 5 && lastDigit > 1) {
+            yourReadedBooks = (getString(R.string.you_readed) + " " + userReads + " " + getString(R.string.books_below_5));
+        } else {
+            yourReadedBooks = getString(R.string.you_readed) + (" " + userReads + " " + getString(R.string.books));
+        }
+        return yourReadedBooks;
     }
 
     public void notificationChannel() {

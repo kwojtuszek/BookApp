@@ -30,7 +30,7 @@
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:text="Wybierz godzine o ktorej masz dostac przypominajke"
+        android:text="@string/set_notify_time_description"
         android:textColor="@color/white"
         android:textSize="20dp" />
 

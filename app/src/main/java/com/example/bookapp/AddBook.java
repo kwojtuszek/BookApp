@@ -1,13 +1,10 @@
 package com.example.bookapp;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -24,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-import com.vishnusivadas.advanced_httpurlconnection.PutData;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -99,7 +96,6 @@ public class AddBook extends Drawer_base {
                                         // Pzzygotowanie obiektu książki
                                         Map<String, Object> book = new HashMap<>();
                                         book.put("name", name);
-                                        book.put("nameSearch", name.toLowerCase());
                                         book.put("author", author);
                                         book.put("pages", Integer.parseInt(pages));
                                         book.put("publisher", publisher);

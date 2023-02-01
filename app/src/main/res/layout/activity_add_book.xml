@@ -108,6 +108,7 @@
         android:layout_below="@+id/year"
         android:text="@string/add_book"
         android:backgroundTint="@color/darker_purple"
+        android:textColor="@color/white"
         app:cornerRadius="10dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"

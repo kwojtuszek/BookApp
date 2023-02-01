@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,6 +46,31 @@ public class FindBook extends Drawer_base {
     ActivityFindBookBinding activityFindBookBinding;
     RecyclerView recyclerView;
     TextView allBooksAssigned;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isConnected()) {
+            Toast.makeText(getApplicationContext(), "Brak Internetu!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean isConnected() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null) {
+            if (networkInfo.isConnected()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +151,7 @@ public class FindBook extends Drawer_base {
                                 ArrayList<String> arrayAuthors = new ArrayList<String>();
 
                                 db.collection("books")
-                                        .orderBy("nameSearch")
+                                        .orderBy("name")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
@@ -176,7 +204,7 @@ public class FindBook extends Drawer_base {
     }
 
 
-    public void findBook(String name) {
+    public void findBook(String searchParam) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -187,14 +215,6 @@ public class FindBook extends Drawer_base {
         String userId = preferences.getString("id", "");
 
         DocumentReference user = db.collection("users").document(userId);
-
-        CollectionReference collection = db.collection("books");
-        Query query = collection;
-        AggregateQuery countQuery = query.count();
-        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                AggregateQuerySnapshot snapshot = task.getResult();
-                long size = snapshot.getCount();
 
                 user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -225,9 +245,9 @@ public class FindBook extends Drawer_base {
                                 ArrayList<String> arrayAuthors = new ArrayList<String>();
 
                                 db.collection("books")
-                                        .orderBy("nameSearch")
-                                        .whereGreaterThanOrEqualTo("nameSearch", name)
-                                        .whereLessThan("nameSearch", name + "\uf8ff")
+                                        .orderBy("name")
+//                                        .whereGreaterThanOrEqualTo("name", nameUpper)
+//                                        .whereLessThan("name", nameLower + "\uf8ff")
                                         .get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
@@ -246,11 +266,15 @@ public class FindBook extends Drawer_base {
 
                                                         if (!isReading) {
 
-                                                            arrayNames.add(document.getString("name"));
-                                                            arrayAuthors.add(document.getString("author"));
-                                                            arrayIds.add(document.getId());
-                                                            arrayRates.add(document.getLong("rates").toString());
-                                                            arrayPages.add(document.getLong("pages").toString());
+                                                            if (document.getString("name").toLowerCase().contains(searchParam) || document.getString("author").toLowerCase().contains(searchParam)) {
+
+                                                                arrayNames.add(document.getString("name"));
+                                                                arrayAuthors.add(document.getString("author"));
+                                                                arrayIds.add(document.getId());
+                                                                arrayRates.add(document.getLong("rates").toString());
+                                                                arrayPages.add(document.getLong("pages").toString());
+
+                                                            }
 
                                                         }
 
@@ -274,9 +298,5 @@ public class FindBook extends Drawer_base {
                         }
                     }
                 });
-
-            } else {
-            }
-        });
     }
 }

@@ -3,8 +3,11 @@ package com.example.bookapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -57,26 +60,31 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 openRegister();
             }
-        });
-
-        // Przejście do odzyskania hasła
-        forgotpass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openPasswordReset();
-            }
-        });
+    });
 
 
-        // Funkcja odpowiadająca za logowanie
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    // Przejście do odzyskania hasła
+        forgotpass.setOnClickListener(new View.OnClickListener()
 
-                login();
-            }
-        });
+    {
+        @Override
+        public void onClick (View view){
+        openPasswordReset();
     }
+    });
+
+
+    // Funkcja odpowiadająca za logowanie
+        login.setOnClickListener(new View.OnClickListener()
+
+    {
+        @Override
+        public void onClick (View v){
+
+        login();
+    }
+    });
+}
 
     // Logowanie
     public void login() {
@@ -84,7 +92,7 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         tvUsername = findViewById(R.id.username);
-        tvPassword =  findViewById(R.id.password);
+        tvPassword = findViewById(R.id.password);
 
         String username, password;
         username = tvUsername.getText().toString();

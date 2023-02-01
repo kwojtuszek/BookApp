@@ -57,7 +57,11 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
     @Override
     public void onBindViewHolder(@NonNull RecyclerReadedBooksAdapter.viewHolder holder, int position) {
         holder.title.setText(titles[position]);
-        holder.reads.setText(context.getString(R.string.readed_row) + " " + reads[position] + " " + context.getString(R.string.amount));
+        if (reads[position].equals("1")) {
+            holder.reads.setText(context.getString(R.string.readed_row) + " " + reads[position] + " " + context.getString(R.string.amount_one));
+        } else {
+            holder.reads.setText(context.getString(R.string.readed_row) + " " + reads[position] + " " + context.getString(R.string.amount));
+        }
         holder.author.setText(author[position]);
         holder.id.setText(ids[position]);
         holder.ratingBar.setRating(Float.parseFloat(userRate[position]));
