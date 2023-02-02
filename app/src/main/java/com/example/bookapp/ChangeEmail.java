@@ -41,8 +41,11 @@ public class ChangeEmail extends Drawer_base {
         changebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                changeEmail();
+                if (!connectionUtility.isConnected(ChangeEmail.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(ChangeEmail.this);
+                } else {
+                    changeEmail();
+                }
             }
         });
     }

@@ -48,6 +48,10 @@ public class MainActivity extends Drawer_base {
     ImageView imPet;
 
     int[] levelThresholds = {10, 20, 30, 40, 50, 60, 70, 80, 90, 91};
+
+    Map<String, String> petMesseages = new HashMap<>();
+    Map<String, Integer> petImages = new HashMap<>();
+
     ActivityMainBinding activityMainBinding;
     ProgressBar progress_bar;
     int userLevel, userReads;
@@ -73,6 +77,8 @@ public class MainActivity extends Drawer_base {
         tvNextLevel = findViewById(R.id.next_level);
         progress_bar = findViewById(R.id.bar);
         imPet = findViewById(R.id.pet_image);
+        petMesseages = getPetMessages();
+        petImages = getPetImages();
 
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
@@ -90,16 +96,14 @@ public class MainActivity extends Drawer_base {
 
         tvNextLevel.setText(getNextLevelText(userLevel, userReads));
 
-        imPet.setImageResource(setPetImage(pet));
+        imPet.setImageResource(petImages.get(pet));
 
         imPet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setPetMessage(pet);
+                Toast.makeText(getApplicationContext(), petMesseages.get(pet), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     public int getExperienceByLevel(int userReads) {
@@ -192,101 +196,35 @@ public class MainActivity extends Drawer_base {
         }
     }
 
-    public int setPetImage(String pet) {
+    public Map getPetImages() {
 
-        int imageSrc = 0;
+        petImages.put("lion", R.drawable.lion);
+        petImages.put("dog", R.drawable.doggo);
+        petImages.put("cat", R.drawable.kitty);
+        petImages.put("piggy", R.drawable.piggy);
+        petImages.put("shark", R.drawable.shark);
+        petImages.put("cow", R.drawable.cow);
+        petImages.put("sloth", R.drawable.sloth);
+        petImages.put("fox", R.drawable.fox);
+        petImages.put("turtle", R.drawable.turtle);
+        petImages.put("crocodile", R.drawable.crocodile);
 
-        switch (pet) {
-
-            case "lion":
-                imageSrc = R.drawable.lion;
-                break;
-
-            case "dog":
-                imageSrc = R.drawable.doggo;
-                break;
-
-            case "cat":
-                imageSrc = R.drawable.kitty;
-                break;
-
-            case "piggy":
-                imageSrc = R.drawable.piggy;
-                break;
-
-            case "shark":
-                imageSrc = R.drawable.shark;
-                break;
-
-            case "cow":
-                imageSrc = R.drawable.cow;
-                break;
-
-            case "sloth":
-                imageSrc = R.drawable.sloth;
-                break;
-
-            case "fox":
-                imageSrc = R.drawable.fox;
-                break;
-
-            case "turtle":
-                imageSrc = R.drawable.turtle;
-                break;
-
-            case "crocodile":
-                imageSrc = R.drawable.crocodile;
-                break;
-        }
-
-        return imageSrc;
-
+        return petImages;
     }
 
-    public void setPetMessage(String pet) {
+    public Map getPetMessages() {
 
-        switch (pet) {
+        petMesseages.put("lion", getString(R.string.lion_click));
+        petMesseages.put("dog", getString(R.string.dog_click));
+        petMesseages.put("cat", getString(R.string.cat_click));
+        petMesseages.put("piggy", getString(R.string.piggy_click));
+        petMesseages.put("shark", getString(R.string.shark_click));
+        petMesseages.put("cow", getString(R.string.cow_click));
+        petMesseages.put("sloth", getString(R.string.sloth_click));
+        petMesseages.put("fox", getString(R.string.fox_click));
+        petMesseages.put("turtle", getString(R.string.turtle_click));
+        petMesseages.put("crocodile", getString(R.string.crocodile_click));
 
-            case "lion":
-                Toast.makeText(getApplicationContext(), getString(R.string.lion_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "dog":
-                Toast.makeText(getApplicationContext(), getString(R.string.dog_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "cat":
-                Toast.makeText(getApplicationContext(), getString(R.string.cat_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "piggy":
-                Toast.makeText(getApplicationContext(), getString(R.string.piggy_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "shark":
-                Toast.makeText(getApplicationContext(), getString(R.string.shark_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "cow":
-                Toast.makeText(getApplicationContext(), getString(R.string.cow_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "sloth":
-                Toast.makeText(getApplicationContext(), getString(R.string.sloth_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "fox":
-                Toast.makeText(getApplicationContext(), getString(R.string.fox_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "turtle":
-                Toast.makeText(getApplicationContext(), getString(R.string.turtle_click), Toast.LENGTH_SHORT).show();
-                break;
-
-            case "crocodile":
-                Toast.makeText(getApplicationContext(), getString(R.string.crocodile_click), Toast.LENGTH_SHORT).show();
-                break;
-        }
-
+        return petMesseages;
     }
 }

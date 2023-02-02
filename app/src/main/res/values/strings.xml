@@ -154,5 +154,7 @@
     <string name="level_req_2">books to next level</string>
     <string name="level_req_3">books to next level</string>
     <string name="title_or_author">Title or Author</string>
+    <string name="no_conncetion">No internet connection</string>
+    <string name="no_conncection_description">This app requires internet connection to function properly. Please connect to the internet and try again.</string>
 
 </resources>

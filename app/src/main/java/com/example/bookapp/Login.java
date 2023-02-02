@@ -3,18 +3,14 @@ package com.example.bookapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -24,7 +20,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
 public class Login extends AppCompatActivity {
 
@@ -32,6 +27,7 @@ public class Login extends AppCompatActivity {
     MaterialButton login;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,33 +54,42 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openRegister();
+                if (!connectionUtility.isConnected(Login.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(Login.this);
+                } else {
+                    openRegister();
+                }
             }
-    });
+        });
 
 
-    // Przejście do odzyskania hasła
-        forgotpass.setOnClickListener(new View.OnClickListener()
+        // Przejście do odzyskania hasła
+        forgotpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-    {
-        @Override
-        public void onClick (View view){
-        openPasswordReset();
+                if (!connectionUtility.isConnected(Login.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(Login.this);
+                } else {
+                    openPasswordReset();
+                }
+            }
+        });
+
+
+        // Funkcja odpowiadająca za logowanie
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!connectionUtility.isConnected(Login.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(Login.this);
+                } else {
+                    login();
+                }
+            }
+        });
     }
-    });
-
-
-    // Funkcja odpowiadająca za logowanie
-        login.setOnClickListener(new View.OnClickListener()
-
-    {
-        @Override
-        public void onClick (View v){
-
-        login();
-    }
-    });
-}
 
     // Logowanie
     public void login() {
@@ -99,7 +104,7 @@ public class Login extends AppCompatActivity {
         password = tvPassword.getText().toString();
 
         // Sprawdzenie czy wszystkie pola są wypełnione
-        if (!username.equals("") && !password.equals("")) {
+        if (!username.isEmpty() && !password.isEmpty()) {
 
             // Pobranie adresu email po nazwie użytkownika z Firestore
             db.collection("users")
@@ -152,6 +157,8 @@ public class Login extends AppCompatActivity {
                             }
                         }
                     });
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.fields_req), Toast.LENGTH_SHORT).show();
         }
     }
 

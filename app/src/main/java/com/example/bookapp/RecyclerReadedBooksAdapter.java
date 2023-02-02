@@ -1,13 +1,10 @@
 package com.example.bookapp;
 
 
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,6 +32,7 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
     String ids[];
     String userRate[];
     Context context;
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
 
     public RecyclerReadedBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
@@ -69,65 +67,11 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
         holder.readedBooksLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
-                pageChangeDialog.setTitle(context.getString(R.string.readed_book_alert));
-
-                pageChangeDialog.setPositiveButton(context.getString(R.string.rate_again), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        SharedPreferences passBookId = context.getSharedPreferences("book_id", context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = passBookId.edit();
-                        editor.putString("bookId", ids[position]);
-                        editor.apply();
-                        openRateBook();
-                    }
-                    });
-
-                pageChangeDialog.setNegativeButton(context.getString(R.string.read_again), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
-                        String userId = preferences.getString("id", "");
-
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        DocumentReference user = db.collection("users").document(userId);
-
-                        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-
-                                        int ifAlreadyReading = Integer.parseInt(document.get("book." + ids[position] + ".page").toString());
-
-                                        if (ifAlreadyReading != 0) {
-
-                                            Toast.makeText(context, context.getString(R.string.already_reading), Toast.LENGTH_SHORT).show();
-                                        } else {
-
-                                            db.collection("users").document(userId)
-                                                    .update(
-                                                            "book." + ids[position] + ".page", 1
-                                                    );
-
-                                            Toast.makeText(context, context.getString(R.string.reading_again), Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                });
-
-                pageChangeDialog.show();
+                if (!connectionUtility.isConnected(context)) {
+                    connectionUtility.showNoInternetConnectionAlert(context);
+                } else {
+                    readAndRateAgain(position);
+                }
             }
         });
     }
@@ -135,6 +79,69 @@ public class RecyclerReadedBooksAdapter extends RecyclerView.Adapter<RecyclerRea
     @Override
     public int getItemCount() {
         return titles.length;
+    }
+
+    private void readAndRateAgain(int position) {
+
+
+        AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
+        pageChangeDialog.setTitle(context.getString(R.string.readed_book_alert));
+
+        pageChangeDialog.setPositiveButton(context.getString(R.string.rate_again), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                SharedPreferences passBookId = context.getSharedPreferences("book_id", context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = passBookId.edit();
+                editor.putString("bookId", ids[position]);
+                editor.apply();
+                openRateBook();
+            }
+        });
+
+        pageChangeDialog.setNegativeButton(context.getString(R.string.read_again), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
+                String userId = preferences.getString("id", "");
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference user = db.collection("users").document(userId);
+
+                user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+
+                                int ifAlreadyReading = Integer.parseInt(document.get("book." + ids[position] + ".page").toString());
+
+                                if (ifAlreadyReading != 0) {
+
+                                    Toast.makeText(context, context.getString(R.string.already_reading), Toast.LENGTH_SHORT).show();
+                                } else {
+
+                                    db.collection("users").document(userId)
+                                            .update(
+                                                    "book." + ids[position] + ".page", 1
+                                            );
+
+                                    Toast.makeText(context, context.getString(R.string.reading_again), Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        pageChangeDialog.show();
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

@@ -39,7 +39,11 @@ public class ChangeUsername extends Drawer_base {
             @Override
             public void onClick(View view) {
 
-                changeUsername();
+                if (!connectionUtility.isConnected(ChangeUsername.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(ChangeUsername.this);
+                } else {
+                    changeUsername();
+                }
 
             }
         });

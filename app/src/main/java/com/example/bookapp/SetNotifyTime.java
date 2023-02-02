@@ -38,8 +38,12 @@ public class SetNotifyTime extends Drawer_base {
             @Override
             public void onClick(View view) {
 
-                setNotifyTime(numberPicker.getValue());
-                openMain();
+                if (!connectionUtility.isConnected(SetNotifyTime.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(SetNotifyTime.this);
+                } else {
+                    setNotifyTime(numberPicker.getValue());
+                    openMain();
+                }
             }
         });
     }

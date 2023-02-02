@@ -12,15 +12,24 @@ import android.graphics.BitmapFactory;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.transform.Result;
+
 public class Broadcast extends BroadcastReceiver {
+
+    Map<String, String> petNotifications = new HashMap<>();
+    Map<String, Integer> petIcons = new HashMap<>();
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        petNotifications = getPetNotifications(context);
+        petIcons = getPetIcons();
+
         SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
         String pet = preferences.getString("pet", "");
-        String contentText = setContentText(pet, context);
-        int largeIcon = setLargeIcon(pet);
 
         Intent repeating_Intent = new Intent(context, MainActivity.class);
         repeating_Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -29,9 +38,9 @@ public class Broadcast extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "Notification")
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), largeIcon), 128, 128, false))
+                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(context.getResources(), petIcons.get(pet)), 128, 128, false))
                 .setContentTitle(context.getString(R.string.reminder))
-                .setContentText(contentText)
+                .setContentText(petNotifications.get(pet))
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
@@ -40,106 +49,35 @@ public class Broadcast extends BroadcastReceiver {
         notificationManager.notify(200, builder.build());
     }
 
+    public Map getPetNotifications(Context context) {
 
-    public String setContentText(String pet, Context context) {
+        petNotifications.put("lion", context.getString(R.string.lion_notify));
+        petNotifications.put("dog", context.getString(R.string.dog_notify));
+        petNotifications.put("cat", context.getString(R.string.cat_notify));
+        petNotifications.put("piggy", context.getString(R.string.piggy_notify));
+        petNotifications.put("shark", context.getString(R.string.shark_notify));
+        petNotifications.put("cow", context.getString(R.string.cow_notify));
+        petNotifications.put("sloth", context.getString(R.string.sloth_notify));
+        petNotifications.put("fox", context.getString(R.string.fox_notify));
+        petNotifications.put("turtle", context.getString(R.string.turtle_notify));
+        petNotifications.put("crocodile", context.getString(R.string.crocodile_notify));
 
-        String message = "";
-
-        switch (pet) {
-
-            case "lion":
-                message = context.getString(R.string.lion_notify);
-                break;
-
-            case "dog":
-                message = context.getString(R.string.dog_notify);
-                break;
-
-            case "cat":
-                message = context.getString(R.string.cat_notify);
-                break;
-
-            case "piggy":
-                message = context.getString(R.string.piggy_notify);
-                break;
-
-            case "shark":
-                message = context.getString(R.string.shark_notify);
-                break;
-
-            case "cow":
-                message = context.getString(R.string.cow_notify);
-                break;
-
-            case "sloth":
-                message = context.getString(R.string.sloth_notify);
-                break;
-
-            case "fox":
-                message = context.getString(R.string.fox_notify);
-                break;
-
-            case "turtle":
-                message = context.getString(R.string.turtle_notify);
-                break;
-
-            case "crocodile":
-                message = context.getString(R.string.crocodile_notify);
-                break;
-        }
-
-        return message;
+        return petNotifications;
     }
 
-    public int setLargeIcon(String pet) {
+    public Map getPetIcons() {
 
-        int imageSrc = 0;
+        petIcons.put("lion", R.drawable.lion);
+        petIcons.put("dog", R.drawable.doggo);
+        petIcons.put("cat", R.drawable.kitty);
+        petIcons.put("piggy", R.drawable.piggy);
+        petIcons.put("shark", R.drawable.shark);
+        petIcons.put("cow", R.drawable.cow);
+        petIcons.put("sloth", R.drawable.sloth);
+        petIcons.put("fox", R.drawable.fox);
+        petIcons.put("turtle", R.drawable.turtle);
+        petIcons.put("crocodile", R.drawable.crocodile);
 
-        switch (pet) {
-
-            case "lion":
-                imageSrc = R.drawable.lion;
-                break;
-
-            case "dog":
-                imageSrc = R.drawable.doggo;
-                break;
-
-            case "cat":
-                imageSrc = R.drawable.kitty;
-                break;
-
-            case "piggy":
-                imageSrc = R.drawable.piggy;
-                break;
-
-            case "shark":
-                imageSrc = R.drawable.shark;
-                break;
-
-            case "cow":
-                imageSrc = R.drawable.cow;
-                break;
-
-            case "sloth":
-                imageSrc = R.drawable.sloth;
-                break;
-
-            case "fox":
-                imageSrc = R.drawable.fox;
-                break;
-
-            case "turtle":
-                imageSrc = R.drawable.turtle;
-                break;
-
-            case "crocodile":
-                imageSrc = R.drawable.crocodile;
-                break;
-        }
-
-        return imageSrc;
-
+        return petIcons;
     }
-
 }

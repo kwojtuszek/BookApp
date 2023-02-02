@@ -16,8 +16,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DecimalFormat;
-
 public class RateBook extends Drawer_base {
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -40,8 +38,11 @@ public class RateBook extends Drawer_base {
         ratebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                rateBook();
+                if (!connectionUtility.isConnected(RateBook.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(RateBook.this);
+                } else {
+                    rateBook();
+                }
             }
         });
     }

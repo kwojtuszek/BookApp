@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +31,7 @@ public class Register extends AppCompatActivity {
     MaterialButton registerbtn;
     private FirebaseAuth mAuth;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,11 @@ public class Register extends AppCompatActivity {
         registerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                register();
+                if (!connectionUtility.isConnected(Register.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(Register.this);
+                } else {
+                    register();
+                }
             }
         });
     }

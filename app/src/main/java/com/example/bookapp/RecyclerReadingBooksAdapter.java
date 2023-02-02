@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookapp.Utility.ConnectionUtility;
+
 public class RecyclerReadingBooksAdapter extends RecyclerView.Adapter<RecyclerReadingBooksAdapter.viewHolder> {
 
     String titles[];
@@ -19,6 +21,7 @@ public class RecyclerReadingBooksAdapter extends RecyclerView.Adapter<RecyclerRe
     String author[];
     String ids[];
     Context context;
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     public RecyclerReadingBooksAdapter(Context ctx, String data1[], String data2[], String data3[], String data4[], String[] data5) {
         context = ctx;
@@ -48,21 +51,29 @@ public class RecyclerReadingBooksAdapter extends RecyclerView.Adapter<RecyclerRe
         holder.yourBooksLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, UserBook.class);
-                intent.putExtra("titles", titles[position]);
-                intent.putExtra("ids", ids[position]);
-                intent.putExtra("pages", pages[position]);
-                intent.putExtra("actualPage", actualPage[position]);
-                intent.putExtra("author", author[position]);
-                context.startActivity(intent);
+                if (!connectionUtility.isConnected(context)) {
+                    connectionUtility.showNoInternetConnectionAlert(context);
+                } else {
+                    goToUserBook(position);
+                }
             }
         });
     }
 
-
     @Override
     public int getItemCount() {
         return titles.length;
+    }
+
+    private void goToUserBook(int position) {
+
+        Intent intent = new Intent(context, UserBook.class);
+        intent.putExtra("titles", titles[position]);
+        intent.putExtra("ids", ids[position]);
+        intent.putExtra("pages", pages[position]);
+        intent.putExtra("actualPage", actualPage[position]);
+        intent.putExtra("author", author[position]);
+        context.startActivity(intent);
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

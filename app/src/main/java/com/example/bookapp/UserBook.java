@@ -22,9 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class UserBook extends Drawer_base {
 
     String title, id, pages, actualPage, author;
@@ -54,16 +51,22 @@ public class UserBook extends Drawer_base {
         tvPagePages.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pageChange();
+                if (!connectionUtility.isConnected(UserBook.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(UserBook.this);
+                } else {
+                    pageChange();
+                }
             }
         });
 
         readedbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                bookFinished();
-
+                if (!connectionUtility.isConnected(UserBook.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(UserBook.this);
+                } else {
+                    bookFinished();
+                }
             }
         });
     }

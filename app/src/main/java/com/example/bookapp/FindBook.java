@@ -1,76 +1,42 @@
 package com.example.bookapp;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.example.bookapp.databinding.ActivityFindBookBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.vishnusivadas.advanced_httpurlconnection.PutData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class FindBook extends Drawer_base {
 
+    ConnectionUtility connectionUtility = new ConnectionUtility();
     ActivityFindBookBinding activityFindBookBinding;
     RecyclerView recyclerView;
     TextView allBooksAssigned;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (!isConnected()) {
-            Toast.makeText(getApplicationContext(), "Brak Internetu!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public boolean isConnected() {
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        if (networkInfo != null) {
-            if (networkInfo.isConnected()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +57,12 @@ public class FindBook extends Drawer_base {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                findBook(search.getText().toString().toLowerCase());
+
+                if (!connectionUtility.isConnected(FindBook.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(FindBook.this);
+                } else {
+                    findBook(search.getText().toString().toLowerCase());
+                }
             }
 
             @Override

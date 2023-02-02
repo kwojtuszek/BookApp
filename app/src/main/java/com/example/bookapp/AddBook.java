@@ -40,7 +40,7 @@ public class AddBook extends Drawer_base {
         super.onCreate(savedInstanceState);
         activityAddBookBinding = activityAddBookBinding.inflate(getLayoutInflater());
         setContentView(activityAddBookBinding.getRoot());
-        allocateActivityTitle("");
+        allocateActivityTitle(getString(R.string.add_book));
 
         tvBookName = findViewById(R.id.book_name);
         tvBookAuthor = findViewById(R.id.book_author);
@@ -50,17 +50,19 @@ public class AddBook extends Drawer_base {
 
         addBookbtn = findViewById(R.id.addBookbtn);
 
-
-        // Funkcja odpowiadająca za dodanie książki do bazy i przypisanie jej uzytkownikowi
         addBookbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                addBook();
+                if (!connectionUtility.isConnected(AddBook.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(AddBook.this);
+                } else {
+                    addBook();
+                }
             }
         });
     }
 
+    // Funkcja odpowiadająca za dodanie książki do bazy i przypisanie jej uzytkownikowi o ile nie jest już przypisana
     public void addBook() {
 
         name = tvBookName.getText().toString();

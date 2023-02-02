@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +16,32 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RecyclerPetAdapter extends RecyclerView.Adapter<RecyclerPetAdapter.viewHolder> {
 
+    String pets[] = {"lion", "dog", "cat", "piggy", "shark", "cow", "sloth", "fox", "turtle", "crocodile"};
+
     Context context;
-    int pets[], levelReq;
+
+    int petsImages[];
+
+    int petChosenMessages[] = {R.string.lion_chosen, R.string.dog_chosen, R.string.cat_chosen,
+            R.string.piggy_chosen, R.string.shark_chosen, R.string.cow_chosen, R.string.sloth_chosen, R.string.fox_chosen,
+            R.string.turtle_chosen, R.string.crocodile_chosen};
+
+    int petDescriptions[] = {R.string.lion_description, R.string.dog_description, R.string.cat_description,
+                    R.string.piggy_description, R.string.shark_description, R.string.cow_description, R.string.sloth_description, R.string.fox_description,
+                    R.string.turtle_description, R.string.crocodile_description};
+
+    int levelReq;
+
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     public RecyclerPetAdapter(Context context, int data[]) {
         this.context = context;
-        this.pets = data;
+        this.petsImages = data;
     }
 
     @NonNull
@@ -40,341 +55,18 @@ public class RecyclerPetAdapter extends RecyclerView.Adapter<RecyclerPetAdapter.
     @Override
     public void onBindViewHolder(@NonNull RecyclerPetAdapter.viewHolder holder, int position) {
 
-        holder.petImage.setImageResource(pets[position]);
-
-        switch (position) {
-
-            case 0:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.lion_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 1:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.dog_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 2:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.cat_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 3:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.piggy_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 4:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.shark_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 5:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.cow_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 6:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.sloth_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 7:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.fox_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 8:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.turtle_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-
-            case 9:
-                levelReq = position + 1;
-                holder.petDescription.setText(context.getString(R.string.crocodile_description));
-                holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
-                break;
-        }
+        levelReq = position + 1;
+        holder.petImage.setImageResource(petsImages[position]);
+        holder.levelReq.setText(context.getString(R.string.level_req) + ": " + levelReq);
+        holder.petDescription.setText(context.getString(petDescriptions[position]));
 
         holder.petLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-                SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
-                String userId = preferences.getString("id", "");
-                int userLevel = preferences.getInt("level", 1);
-                SharedPreferences.Editor editor = preferences.edit();
-
-                AlertDialog.Builder petChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
-                petChangeDialog.setTitle(context.getString(R.string.choose_pet));
-
-                switch (position) {
-
-                    case 0:
-                        petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                editor.putString("pet", "lion");
-                                editor.apply();
-
-                                db.collection("users").document(userId)
-                                        .update(
-                                                "pet", "lion"
-                                        );
-
-                                Toast.makeText(context, context.getString(R.string.lion_chosen), Toast.LENGTH_SHORT).show();
-                                openMain();
-                            }
-                        });
-                        petChangeDialog.show();
-                        break;
-
-                    case 1:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "dog");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "dog"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.dog_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-
-                        break;
-
-                    case 2:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "cat");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "cat"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.cat_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 3:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "piggy");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "piggy"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.piggy_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 4:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "shark");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "shark"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.shark_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 5:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "cow");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "cow"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.cow_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 6:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "sloth");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "sloth"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.sloth_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 7:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "fox");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "fox"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.fox_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 8:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "turtle");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "turtle"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.turtle_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case 9:
-                        levelReq = position + 1;
-                        if (levelReq <= userLevel) {
-
-                            petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    editor.putString("pet", "crocodile");
-                                    editor.apply();
-
-                                    db.collection("users").document(userId)
-                                            .update(
-                                                    "pet", "crocodile"
-                                            );
-
-                                    Toast.makeText(context, context.getString(R.string.crocodile_chosen), Toast.LENGTH_SHORT).show();
-                                    openMain();
-                                }
-                            });
-                            petChangeDialog.show();
-
-                        } else
-                            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
-                        break;
+                if (!connectionUtility.isConnected(context)) {
+                    connectionUtility.showNoInternetConnectionAlert(context);
+                } else {
+                    chosePet(position);
                 }
             }
         });
@@ -382,7 +74,57 @@ public class RecyclerPetAdapter extends RecyclerView.Adapter<RecyclerPetAdapter.
 
     @Override
     public int getItemCount() {
-        return pets.length;
+        return petsImages.length;
+    }
+
+    private void updatePet(String pet) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString("pet", pet);
+        editor.apply();
+
+        db.collection("users").document(userId)
+                .update(
+                        "pet", pet
+                );
+    }
+
+    private void chosePet(int position) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
+        String userId = preferences.getString("id", "");
+        int userLevel = preferences.getInt("level", 1);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        levelReq = position + 1;
+        if (levelReq > userLevel) {
+            Toast.makeText(context, context.getString(R.string.level_too_low) + " " + context.getString(R.string.your_level) + " " + userLevel + " " + context.getString(R.string.level_req) + ": " + levelReq, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder petChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
+        petChangeDialog.setTitle(context.getString(R.string.choose_pet));
+
+        petChangeDialog.setPositiveButton(context.getString(R.string.choose), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                String pet = pets[position];
+
+                updatePet(pet);
+                Toast.makeText(context, context.getString(petChosenMessages[position]), Toast.LENGTH_SHORT).show();
+                openMain();
+
+            }
+        });
+        petChangeDialog.show();
     }
 
     public static class viewHolder extends RecyclerView.ViewHolder {

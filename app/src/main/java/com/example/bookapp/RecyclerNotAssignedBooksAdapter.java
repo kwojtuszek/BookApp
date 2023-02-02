@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,6 +37,7 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
     ArrayList<String> arrayIds = new ArrayList<String>();
     ArrayList<String> arrayRates = new ArrayList<String>();
     ArrayList<String> arrayAuthors = new ArrayList<String>();
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     public RecyclerNotAssignedBooksAdapter(Context ctx, ArrayList<String> data1, ArrayList<String> data2, ArrayList<String> data3, ArrayList<String> data4, ArrayList<String> data5) {
         context = ctx;
@@ -70,73 +72,11 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
-                pageChangeDialog.setTitle(context.getString(R.string.assign_book_alert));
-
-                pageChangeDialog.setPositiveButton(context.getString(R.string.read_again), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
-                        String userId = preferences.getString("id", "");
-
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        DocumentReference user = db.collection("users").document(userId);
-                        DocumentReference book = db.collection("books").document(arrayIds.get(position));
-
-                        user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-
-                                        if (document.get("book." + arrayIds.get(position) + ".page") != null) {
-
-                                            db.collection("users").document(userId)
-                                                    .update(
-                                                            "book." + arrayIds.get(position) + ".page", 1
-                                                    );
-
-                                            Toast.makeText(context, context.getString(R.string.reading_again), Toast.LENGTH_SHORT).show();
-
-                                            openYourBooks();
-
-                                        } else {
-
-                                            // Dane do przypisania w użytkowniku dla książki
-                                            Map<String, Object> bookData = new HashMap<>();
-                                            bookData.put("rate", 0);
-                                            bookData.put("page", 1);
-                                            bookData.put("reads", 0);
-
-                                            // Klucz mapy do znalezienia przypisanych danych
-                                            Map<String, Object> preparedBook = new HashMap<>();
-                                            preparedBook.put(arrayIds.get(position), bookData);
-
-                                            // Wskazanie mapy w której przypisana książka i jej dane mają się zapisać
-                                            Map<String, Object> assignBook = new HashMap<>();
-                                            assignBook.put("book", preparedBook);
-
-                                            // Przypisanie danych
-                                            db.collection("users").document(userId)
-                                                    .set(assignBook, SetOptions.merge());
-
-                                            Toast.makeText(context, context.getString(R.string.book_assigned), Toast.LENGTH_SHORT).show();
-
-                                            openYourBooks();
-                                        }
-                                    } else {
-                                        Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                });
-
-                pageChangeDialog.show();
+                if (!connectionUtility.isConnected(context)) {
+                    connectionUtility.showNoInternetConnectionAlert(context);
+                } else {
+                    readBook(position);
+                }
             }
         });
 }
@@ -144,6 +84,77 @@ public class RecyclerNotAssignedBooksAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public int getItemCount() {
         return arrayNames.size();
+    }
+
+    private void readBook(int position) {
+
+        AlertDialog.Builder pageChangeDialog = new AlertDialog.Builder(context, R.style.CustomAlertDialogTheme);
+        pageChangeDialog.setTitle(context.getString(R.string.assign_book_alert));
+
+        pageChangeDialog.setPositiveButton(context.getString(R.string.read_again), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
+                String userId = preferences.getString("id", "");
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference user = db.collection("users").document(userId);
+                DocumentReference book = db.collection("books").document(arrayIds.get(position));
+
+                user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+
+                                if (document.get("book." + arrayIds.get(position) + ".page") != null) {
+
+                                    db.collection("users").document(userId)
+                                            .update(
+                                                    "book." + arrayIds.get(position) + ".page", 1
+                                            );
+
+                                    Toast.makeText(context, context.getString(R.string.reading_again), Toast.LENGTH_SHORT).show();
+
+                                    openYourBooks();
+
+                                } else {
+
+                                    // Dane do przypisania w użytkowniku dla książki
+                                    Map<String, Object> bookData = new HashMap<>();
+                                    bookData.put("rate", 0);
+                                    bookData.put("page", 1);
+                                    bookData.put("reads", 0);
+
+                                    // Klucz mapy do znalezienia przypisanych danych
+                                    Map<String, Object> preparedBook = new HashMap<>();
+                                    preparedBook.put(arrayIds.get(position), bookData);
+
+                                    // Wskazanie mapy w której przypisana książka i jej dane mają się zapisać
+                                    Map<String, Object> assignBook = new HashMap<>();
+                                    assignBook.put("book", preparedBook);
+
+                                    // Przypisanie danych
+                                    db.collection("users").document(userId)
+                                            .set(assignBook, SetOptions.merge());
+
+                                    Toast.makeText(context, context.getString(R.string.book_assigned), Toast.LENGTH_SHORT).show();
+
+                                    openYourBooks();
+                                }
+                            } else {
+                                Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(context, context.getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        pageChangeDialog.show();
     }
 
 public class viewHolder extends RecyclerView.ViewHolder {

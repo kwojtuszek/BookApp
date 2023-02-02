@@ -69,6 +69,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/registerbtn"
         android:layout_below="@+id/password"
+        android:textColor="@color/white"
         android:text="@string/register"
         android:backgroundTint="@color/darker_purple"
         app:cornerRadius="10dp"

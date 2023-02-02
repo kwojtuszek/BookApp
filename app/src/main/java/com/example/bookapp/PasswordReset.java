@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -20,6 +21,7 @@ public class PasswordReset extends AppCompatActivity {
     TextView tvEmail;
     MaterialButton resetbtn;
     private FirebaseAuth mAuth;
+    ConnectionUtility connectionUtility = new ConnectionUtility();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +34,11 @@ public class PasswordReset extends AppCompatActivity {
         resetbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                resetPassword();
+                if (!connectionUtility.isConnected(PasswordReset.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(PasswordReset.this);
+                } else {
+                    resetPassword();
+                }
             }
         });
     }
@@ -42,7 +47,7 @@ public class PasswordReset extends AppCompatActivity {
 
         tvEmail = findViewById(R.id.email);
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         String emailAddress = tvEmail.getText().toString();
 

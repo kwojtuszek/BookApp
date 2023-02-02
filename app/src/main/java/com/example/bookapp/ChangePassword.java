@@ -40,8 +40,11 @@ public class ChangePassword extends Drawer_base {
         changebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                changePassword();
+                if (!connectionUtility.isConnected(ChangePassword.this)) {
+                    connectionUtility.showNoInternetConnectionAlert(ChangePassword.this);
+                } else {
+                    changePassword();
+                }
             }
         });
     }

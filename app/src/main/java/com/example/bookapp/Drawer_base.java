@@ -9,21 +9,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
-import com.google.android.material.button.MaterialButton;
+import com.example.bookapp.Utility.ConnectionUtility;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.Set;
 
 public class Drawer_base extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    ConnectionUtility connectionUtility = new ConnectionUtility();
     DrawerLayout drawerLayout;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!connectionUtility.isConnected(this)) {
+            connectionUtility.showNoInternetConnectionAlert(this);
+        }
+    }
 
     // Zdefiniowanie wysuwanego menu
     @Override
@@ -123,4 +130,5 @@ public class Drawer_base extends AppCompatActivity implements NavigationView.OnN
             getSupportActionBar().setTitle(titleString);
         }
     }
+
 }

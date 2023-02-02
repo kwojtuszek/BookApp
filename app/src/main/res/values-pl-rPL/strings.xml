@@ -155,4 +155,6 @@
     <string name="level_req_2">książki do następnego poziomu</string>
     <string name="level_req_3">książek do następnego poziomu</string>
     <string name="title_or_author">Tytuł lub Autor</string>
+    <string name="no_conncetion">Brak połączenia z internetem</string>
+    <string name="no_conncection_description">Ta aplikacja wymaga połączenia z internetem do prawidłowego działania. Proszę połączyć się z internetem i spróbować ponownie.</string>
 </resources>
