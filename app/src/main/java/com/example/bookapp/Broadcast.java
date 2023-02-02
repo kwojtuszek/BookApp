@@ -31,7 +31,7 @@ public class Broadcast extends BroadcastReceiver {
         SharedPreferences preferences = context.getSharedPreferences("user_data", context.MODE_PRIVATE);
         String pet = preferences.getString("pet", "");
 
-        Intent repeating_Intent = new Intent(context, MainActivity.class);
+        Intent repeating_Intent = new Intent(context, Login.class);
         repeating_Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, repeating_Intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
