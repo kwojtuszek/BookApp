@@ -157,4 +157,5 @@
     <string name="title_or_author">Tytuł lub Autor</string>
     <string name="no_conncetion">Brak połączenia z internetem</string>
     <string name="no_conncection_description">Ta aplikacja wymaga połączenia z internetem do prawidłowego działania. Proszę połączyć się z internetem i spróbować ponownie.</string>
+    <string name="no_books_found">Nie znaleziono książek</string>
 </resources>

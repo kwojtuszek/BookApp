@@ -36,7 +36,7 @@ public class FindBook extends Drawer_base {
     ConnectionUtility connectionUtility = new ConnectionUtility();
     ActivityFindBookBinding activityFindBookBinding;
     RecyclerView recyclerView;
-    TextView allBooksAssigned;
+    TextView allBooksAssigned, noBooksFound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +78,13 @@ public class FindBook extends Drawer_base {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         allBooksAssigned = findViewById(R.id.no_user_books);
+        noBooksFound = findViewById(R.id.no_books_found);
         recyclerView = findViewById(R.id.recyclerView);
 
         SharedPreferences preferences = getSharedPreferences("user_data", MODE_PRIVATE);
         String userId = preferences.getString("id", "");
 
         DocumentReference user = db.collection("users").document(userId);
-
-        CollectionReference collection = db.collection("books");
-        Query query = collection;
-        AggregateQuery countQuery = query.count();
-        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                AggregateQuerySnapshot snapshot = task.getResult();
-                long size = snapshot.getCount();
 
                 user.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -148,6 +141,12 @@ public class FindBook extends Drawer_base {
                                                             arrayPages.add(document.getLong("pages").toString());
                                                         }
 
+                                                        if (arrayNames.isEmpty()) {
+                                                            allBooksAssigned.setText(getString(R.string.all_books_reading));
+                                                        } else {
+                                                            allBooksAssigned.setText("");
+                                                        }
+
                                                         RecyclerNotAssignedBooksAdapter adapter = new RecyclerNotAssignedBooksAdapter(FindBook.this, arrayNames, arrayPages, arrayIds, arrayRates, arrayAuthors);
                                                         recyclerView.setAdapter(adapter);
                                                         recyclerView.setLayoutManager(new LinearLayoutManager(FindBook.this));
@@ -157,9 +156,6 @@ public class FindBook extends Drawer_base {
                                                 }
                                             }
                                         });
-
-
-
                             } else {
                                 Toast.makeText(getApplicationContext(), getString(R.string.data_load_err), Toast.LENGTH_SHORT).show();
                             }
@@ -168,10 +164,6 @@ public class FindBook extends Drawer_base {
                         }
                     }
                 });
-
-            } else {
-            }
-        });
     }
 
 
@@ -247,6 +239,12 @@ public class FindBook extends Drawer_base {
 
                                                             }
 
+                                                        }
+
+                                                        if (arrayNames.isEmpty() && allBooksAssigned.getText().equals("")) {
+                                                            noBooksFound.setText(getString(R.string.no_books_found));
+                                                        } else {
+                                                            noBooksFound.setText("");
                                                         }
 
                                                         RecyclerNotAssignedBooksAdapter adapter = new RecyclerNotAssignedBooksAdapter(FindBook.this, arrayNames, arrayPages, arrayIds, arrayRates, arrayAuthors);
